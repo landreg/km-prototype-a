@@ -52,3 +52,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Ds_Store
+*.DS_Store
+
+# vagrant
+*.vagrant/
