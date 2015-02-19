@@ -1,57 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
- <head>
-   <meta charset="utf-8">
-               <meta name="viewport" content="width=device-width, initial-scale=1.0">
-               <link rel="shortcut icon" href="https://assets.digital.cabinet-office.gov.uk/static/favicon-9269d2d9f40d20236f60a3dbc448679a.ico" type="image/x-icon">
-               <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-               <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/custom.css">
-   <link href="../static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
- </head>
- <body>
-   <header role="banner" id="global-header" class="">
-                 <div class="header-wrapper">
-                  <div class="navbar">
-                  <div class="navbar-inner">
-                  <div class="container-fluid">
-                  <div class="row">
-                                                   <div class="span1">
-                                                               </div>
-                                                               <a  class="brand" href="https://www.gov.uk/" title="Go to the GOV.UK homepage" id="logo">
-                                                                 <img src="https://assets.digital.cabinet-office.gov.uk/static/gov.uk_logotype_crown-c09acb07e4d1d5d558f5a0bc53e9e36d.png" width="35" height="31" alt=""> GOV.UK
-                                                               </a>
-                                                 </div>
-                                               </div>
-                                 </div>
-                               </div>
-   </header>
-               <div class="container-fluid">
+<!-- extend from base layout -->
+{% extends "base.html" %}
 
+{% block content %}
 
+<div class="container">
 
-              <!--      <div class="row"></div>
-                    <div class="row">
-
-                      <div class="span12 centerring text-center"><p>Help</p></div>
-
-                    </div> -->
-
- <div class="vertical-center">
-    <button class="btn btn-default btn-lg spacer">Discover the Button</button>
+  <div class="row">
+    <div class="span2"></div>
+    <div class="span10"><h1>Search Guidance</h1></div>
+  </div>
+  <div class="row">
+    <div class="span2"></div>
+    <div class="span7">
+      <!-- <form method="POST" action="">
+       <select name="searchArea">
+          <option value="all">All</option>
+          <option value="reg">Registration</option>
+          <option value="info">Info Services</option>
+          <option value="cust">Customer Handling</option>
+        </select>
+        <input type="text" class="form-control" id="searchTermInput" placeholder="Search Keyword(s)">
+        <button type="submit" id="searchSubmit" class="btn btn-default" >Search</button>
+    </form> -->
+    <form method="POST" action="/search">
+    {{form.searchString}}
+    {{form.submit}}
+  </form>
+  </div>
 </div>
-                 <!--    -->
+</div>
 
 
-                 <div class="row">
-       <div class="span2">
-       </div>
-       <a href="http://www.landregistry.gov.uk/professional/terms-and-conditions/" title="Click to view Terms and conditions" style="text-decoration: none">Terms and conditions |</a>
-       <a href="http://www.landregistry.gov.uk/professional/information/foi/" title="Click to view Freedom of information" style="text-decoration: none">Freedom of information |</a>
-       <a href="http://www.landregistry.gov.uk/professional/terms-and-conditions/copyright-policy" title="Click to view crown copyright" style="text-decoration: none">&copy; Crown copyright 2008</a>
-                 </div>
-   </div>
-
- </body>
- <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
- <script src="../static/bootstrap/js/bootstrap.min.js"></script>
-</html>
+{% endblock %}
