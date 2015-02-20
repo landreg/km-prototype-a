@@ -1,0 +1,34 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+
+  <div class="row">
+    <div class="span2"></div>
+    <div class="span10"><h1>Search Guidance</h1></div>
+  </div>
+  <div class="row">
+    <div class="span2"></div>
+    <div class="span7">
+      <!-- <form method="POST" action="">
+       <select name="searchArea">
+          <option value="all">All</option>
+          <option value="reg">Registration</option>
+          <option value="info">Info Services</option>
+          <option value="cust">Customer Handling</option>
+        </select>
+        <input type="text" class="form-control" id="searchTermInput" placeholder="Search Keyword(s)">
+        <button type="submit" id="searchSubmit" class="btn btn-default" >Search</button>
+    </form> -->
+    <form method="POST" action="/search">
+    {{form.searchString}}
+    {{form.submit}}
+  </form>
+  </div>
+</div>
+</div>
+
+
+{% endblock %}
