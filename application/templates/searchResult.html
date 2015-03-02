@@ -33,7 +33,16 @@
         </div>
   </header>
 
-
+    <div class="container">
+      <!--<p>My string:</p>
+      <p>Value from the list: {{subtitleElements[0]}}</p>
+      <p>The following sub titles have been found:</p>
+      <ul>
+        {% for n in subtitleElements %}
+        <li> <a href="/page">{{n}}</a> </li>
+        {% endfor %}
+      </ul>-->
+    </div>
 
     <div class="container"></div>
     <div class="container"></div>
@@ -44,7 +53,11 @@
       <div class="row">
         <div class="span2"></div>
         <div class="span3"><h1>Search Result:</h1></div>
-        <div class="span3"><h1>{{searchElements}}</h1></div>
+        <ul>
+          {% for n in titleElements %}
+          <div class="span3"> <a href="/page">{{n}}</a> </div>
+          {% endfor %}
+          </ul>
       </div>
 
   </div>
