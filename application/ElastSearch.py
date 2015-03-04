@@ -1,8 +1,8 @@
 import urllib2
 import json
-from elasticsearch import Elasticsearch
+#from elasticsearch import Elasticsearch
 import array
-import requests
+#import requests
 
 
 URL = 'http://192.168.50.7:9200/knowledge/information'
@@ -45,13 +45,13 @@ def SearchDataOnMeta(data):
     
     return res
     
-def GetAllData():
+"""def GetAllData():
     # create ES client, create index
     es = Elasticsearch(hosts = [ES_HOST])
     #res = es.search(index = INDEX_NAME, size=4, body={"query": {"query_string": {"query": data}}})
     data = es.search(index = INDEX_NAME, size=4, body={"query": {"match_all": {}}})
     #print(" response: '%s'" % (res)) 
-    return data
+    return data"""
 
 def SearchDataOnBody(data):
     url = URL+'/_search?q=body:'+data+'&size=5'
@@ -73,13 +73,13 @@ def SearchDataOnBody(data):
     #return json.dumps(lst)
     return res
 
-def buildingData():
+"""def buildingData():
         url = "http://192.168.50.4:5000/BGREST/api/data"
         payload = json.dumps({'title': title, 'address': address, 'type': appType})
         headers = {'content-type': 'application/json'}
         r = requests.post(REMOTE_URL, data=payload, headers=headers)
         flash(r.text)
-        flash(r.status_code)
+        flash(r.status_code)"""
         
     
     
