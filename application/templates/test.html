@@ -1,0 +1,42 @@
+{% extends "gov-base.html" %}
+
+{% block content %}
+
+<div class="row">
+
+  <div class="col-md-9">
+
+    {{searchElements|safe}}
+  <h2>Bankruptcy - Applications for Form J restrictions</h2>
+  <p class="lead">Where one or more of joint registered proprietors is subject to a petition in bankruptcy or bankruptcy order,
+     neither a bankruptcy notice nor a bankruptcy restriction will be entered.
+     However, the Official Receiver or trustee in bankruptcy may apply in form RX1 for a Form J
+     restriction once the bankruptcy order has been made.</p>
+
+    <div class="km_item km_reference" id="sole_proprietors">
+      <div class="droptoggle">
+        <input type="checkbox" id="pd1"/>
+        <label class="sub_head" for="pd1"> Sole Proprietor </label>
+          <div class=droptext >
+            <p>Where a petition in bankruptcy is filed in the court against a sole registered proprietor,
+              a bankruptcy notice is entered in the register. Once the bankruptcy order has been made against a sole
+              registered proprietor, a bankruptcy restriction is entered in the register.</p>
+            <p>A <span class="km_glossary" title="a trusted person">trustee</span> in bankruptcy should not apply for a Form J restriction where:</p>
+            <ul>
+              <li><span class="km_snippet" km_snippet="snip101">a bankruptcy inhibition or bankruptcy<triction is entered in the register, and</li>
+              <li>the trustee accepts that the registered estate has vested in them.</li>
+            </ul>
+            <p>This is because, given the existing bankruptcy entry, the entry of the restriction isn't necessary or
+              desirable within s.42(1), LRA 2002. Further, a trustee probably can't rely upon r.93(j), LRR 2003 as they
+              don't have a beneficial interest - a person who is the undivided legal and beneficial owner of property has
+              no separate equitable interest in it (Westdeutsche Landesbank Girozentrale v Islington LBC [1996] AC 669 at 705).</p>
+            <p>See Topic - Bankruptcy</p>
+          </div>
+        </div>
+      </div> <!-- item_name1 -->
+
+  </div>
+  <div class="col-md-3">
+  </div>
+</div>
+{% endblock %}
