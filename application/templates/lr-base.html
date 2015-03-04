@@ -1,0 +1,53 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Knowledge Managment{% endblock %}
+
+{% block styles %}
+{{super()}}
+  <link rel="shortcut icon" href="static/images/logo.png" type="image/x-icon">
+  <link rel="stylesheet" href="{{url_for('.static', filename='lr-custom.css')}}">
+{% endblock %}
+
+{% block navbar %}
+<div id="wrap">
+
+  <div id="banner">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <div class="row">
+        <img src="static/images/Land-Registry.png" height="70" alt="">
+        <label><h3>Casework Guidance Knowledge Base</h3></label>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="container-fluid">
+{% endblock %}
+
+{% block content %}
+<!-- Put content here -->
+{% endblock %}
+</div>
+
+{% block scripts %}
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  </div>
+</div>
+
+<div id="footer">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-11">
+        <p>&copy; Land Registry 2015.</p>
+      </div>
+      <div class="col-md-1">
+        <a href="http://www.w3schools.com">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
