@@ -4,50 +4,39 @@
 
 {% block styles %}
 {{super()}}
-  <link rel="shortcut icon" href="static/images/logo.png" type="image/x-icon">
-  <link rel="stylesheet" href="{{url_for('.static', filename='lr-custom.css')}}">
+<link rel="shortcut icon" href="static/images/logo.png" type="image/x-icon">
+<link rel="stylesheet" href="{{url_for('.static', filename='lr-custom.css')}}">
 {% endblock %}
 
 {% block navbar %}
-<div id="wrap">
-
-  <div id="banner">
+<!-- Header navbar construct -->
+<div class="navbar navbar-default navbar-fixed-top">
+  <div id="pg-header">
+      <img src="static/images/Land-Registry.png" height="70" alt="">
+      <label><h3>Casework Guidance Knowledge Base</h3></label>
+  </div>
+</div>
+<!-- And the footer -->
+<div class="navbar navbar-default navbar-fixed-bottom">
+  <div id="pg-footer">
     <div class="container-fluid">
-      <div class="navbar-header">
-        <div class="row">
-        <img src="static/images/Land-Registry.png" height="70" alt="">
-        <label><h3>Casework Guidance Knowledge Base</h3></label>
-      </div>
+        <p class="navbar-text pull-left">&copy Land Registry 2015</p>
+        <p class="navbar-text pull-right"><a href="http://www.w3schools.com" class="navbar-link">Contact Us</a></p>
     </div>
   </div>
-  </div>
-
-  <div class="container-fluid">
+</div>
 {% endblock %}
 
+
+<div id="main-content" class="container-fluid">
 {% block content %}
 <!-- Put content here -->
 {% endblock %}
 </div>
 
-{% block scripts %}
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-  </div>
-</div>
 
-<div id="footer">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-11">
-        <p>&copy; Land Registry 2015.</p>
-      </div>
-      <div class="col-md-1">
-        <a href="http://www.w3schools.com">Contact Us</a>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- Uncomment and complete if we need to use custom Javascript
+{% block scripts %}
+{{super()}}
 {% endblock %}
+-->
