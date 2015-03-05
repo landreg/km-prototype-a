@@ -54,9 +54,9 @@
         <div class="span2"></div>
         <div class="span3"><h1>Search Result:</h1></div>
         <ul>
-          
-          <div class="span3"> <a href="/page">titleElements</a> </div>
-          
+          {% for n in titleElements %}
+          <div class="span3"> <a href="/page">{{n}}</a> </div>
+          {% endfor %}
           </ul>
       </div>
 
