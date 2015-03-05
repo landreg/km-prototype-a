@@ -7,8 +7,9 @@ from forms import searchForm
 @app.route('/')
 @app.route('/index', methods=['GET','POST'])
 def index():
-    form = searchForm()
-    return render_template('index.html', form=form)
+    #form = searchForm()
+    #return render_template('index.html', form=form)
+    return 'hello word'
 
 @app.route('/search', methods=['GET','POST'])
 def searchResult():
@@ -29,7 +30,7 @@ def searchResult():
     #    SubtitleList.append(hit["_source"]["sub title"])
     #print SearchList[0]
     #return render_template('searchResult.html',titleElements=TitleList, bodyElements=BodyList, subtitleElements=BodyList)
-    return render_template('searchResult.html',titleElements='Transfer', bodyElements='head', subtitleElements='tails')
+    return render_template('searchResult.html')
    
     
     
