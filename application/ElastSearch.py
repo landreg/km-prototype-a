@@ -14,22 +14,34 @@ REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/info
 USR = 'cp94zbqxv3'
 PWD = 'estftr8mkx'
 
-def SearchDataOnMeta(data):
-    
+def SearchDataOnId(data):
+
     passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
     passman.add_password(None, REMOTE_URL, USR, PWD)
     auth_handler = urllib2.HTTPBasicAuthHandler(passman)
     opener = urllib2.build_opener(auth_handler)
     urllib2.install_opener(opener)
-    
+
+    url = REMOTE_URL+'/_search?q=itemid:'+data+'&size=1'
+    out = urllib2.urlopen(url)
+    res = out.read()
+    res = json.loads(res)
+
+    return res
+
+def SearchDataOnMeta(data):
+
+    passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+    passman.add_password(None, REMOTE_URL, USR, PWD)
+    auth_handler = urllib2.HTTPBasicAuthHandler(passman)
+    opener = urllib2.build_opener(auth_handler)
+    urllib2.install_opener(opener)
+
     url = REMOTE_URL+'/_search?q=meta:'+data+'&size=5'
     out = urllib2.urlopen(url)
+
     
-    
-    
-    
-    
-    
+
     #req = urllib2.Request(url)
     #out = urllib2.urlopen(url)
     res = out.read()
@@ -42,15 +54,15 @@ def SearchDataOnMeta(data):
     #code to get at the _source
     #for hit in data['hits']['hits']:
         #print = (hit["_source"])
-    
+
     return res
-    
+
 """def GetAllData():
     # create ES client, create index
     es = Elasticsearch(hosts = [ES_HOST])
     #res = es.search(index = INDEX_NAME, size=4, body={"query": {"query_string": {"query": data}}})
     data = es.search(index = INDEX_NAME, size=4, body={"query": {"match_all": {}}})
-    #print(" response: '%s'" % (res)) 
+    #print(" response: '%s'" % (res))
     return data"""
 
 def SearchDataOnBody(data):
@@ -80,9 +92,9 @@ def SearchDataOnBody(data):
         r = requests.post(REMOTE_URL, data=payload, headers=headers)
         flash(r.text)
         flash(r.status_code)"""
-        
-    
-    
+
+
+
 #SearchDataOnTitle('charge')
 #otherSearch('charge')
 #res = SearchDataOnBody('mortgage')

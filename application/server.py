@@ -2,9 +2,9 @@ from flask import render_template, flash, redirect
 from application import app
 from flask import render_template
 from forms import searchForm
-from ElastSearch import SearchDataOnMeta
+from ElastSearch import SearchDataOnMeta, SearchDataOnId
 
-
+storeditemid = 1
 @app.route('/test', methods=['GET','POST'])
 def displaySearchResult():
 
@@ -52,6 +52,57 @@ def searchResult():
 
 
 
-@app.route('/page', methods=['GET','POST'])
-def displayPage():
-    print('display knowledge article page')
+@app.route('/page/<int:itemid>', methods=['GET'])
+def displayPage(itemid):
+
+    global storeditemid
+
+    storeditemid = itemid
+    res = SearchDataOnId(str(itemid))
+
+    for hit in res['hits']['hits']:
+        body = (hit["_source"]["body"])
+        title = (hit["_source"]["title"])
+        subtitle = (hit["_source"]["sub title"])
+
+    print storeditemid
+
+    return render_template('page.html',searchElements=body)
+
+@app.route('/lr-content-static', methods=['GET'])
+def lrcontentstatic():
+    form = searchForm()
+    return render_template('lr-content.html')
+
+@app.route('/lr-page/<int:itemid>', methods=['GET'])
+def displayLrPage(itemid):
+
+    global storeditemid
+
+    storeditemid = itemid
+    res = SearchDataOnId(str(itemid))
+
+    for hit in res['hits']['hits']:
+        body = (hit["_source"]["body"])
+        title = (hit["_source"]["title"])
+        subtitle = (hit["_source"]["sub title"])
+
+    print storeditemid
+
+    return render_template('lr-page.html',searchElements=body)
+
+@app.route('/lr-page', methods=['GET'])
+def lrcontent():
+        global storeditemid
+
+        itemid = storeditemid
+        res = SearchDataOnId(str(itemid))
+
+        for hit in res['hits']['hits']:
+            body = (hit["_source"]["body"])
+            title = (hit["_source"]["title"])
+            subtitle = (hit["_source"]["sub title"])
+
+        print storeditemid
+
+        return render_template('lr-page.html',searchElements=body)
