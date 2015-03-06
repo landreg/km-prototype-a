@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-2">
+  </div>
+  <div class="col-md-4">
+  <h2>Choose your style</h2>
+  <div class="list-group">
+    <a href="/lr-page/1" class="list-group-item">Land Registry</a>
+    <a href="/gov-page/1" class="list-group-item">GOV UK</a>
+    <a href="/lr-page-std/1" class="list-group-item">Variable</a>
+  </div>
+  </div>
+  <div class="col-md-4">
+    <h2>Static examples</h2>
+    <div class="list-group">
+      <a href="/lr-content-static" class="list-group-item">Land Registry</a>
+      <a href="/gov-content-static" class="list-group-item">GOV UK</a>
+      <a href="/lr-content-std-static" class="list-group-item">Variable</a>
+    </div>
+  </div>
+  <div class="col-md-2">
+  </div>
+</div>
+{% endblock %}

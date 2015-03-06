@@ -4,52 +4,39 @@
 
 {% block styles %}
 {{super()}}
-  <link rel="shortcut icon" href="https://assets.digital.cabinet-office.gov.uk/static/favicon-9269d2d9f40d20236f60a3dbc448679a.ico" type="image/x-icon">
-  <link rel="stylesheet" href="{{url_for('.static', filename='gov-custom.css')}}">
+<link rel="shortcut icon" href="https://assets.digital.cabinet-office.gov.uk/static/favicon-9269d2d9f40d20236f60a3dbc448679a.ico" type="image/x-icon">
+<link rel="stylesheet" href="{{url_for('.static', filename='gov-custom.css')}}">
 {% endblock %}
 
 {% block navbar %}
-<div id="wrap">
-
-  <div id="banner">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <div class="row">
-          <div class="col-md-1">
-          </div>
-          <div class="col-md-11">
-            <img src="https://assets.digital.cabinet-office.gov.uk/static/gov.uk_logotype_crown-c09acb07e4d1d5d558f5a0bc53e9e36d.png" width="35" height="31" alt="">
-            <label> Casework Guidance Knowledge Base</label>
-          </div>
-        </div>
-      </div>
-     </div>
-  </div>
-
-  <div class="container-fluid">
-{% endblock %}
-
-{% block content %}
-<!-- Put content here -->
-{% endblock %}
-
-{% block scripts %}
+<!-- Header navbar construct -->
+<div class="navbar navbar-default navbar-fixed-top">
+  <div id="pg-header">
+    <img src="https://assets.digital.cabinet-office.gov.uk/static/gov.uk_logotype_crown-c09acb07e4d1d5d558f5a0bc53e9e36d.png" width="58" height="55" style="padding-right: 5px"alt="">
+      <label><h3>Casework Guidance Knowledge Base</h3></label>
   </div>
 </div>
-
-<div id="footer">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-10">
-        <p>&copy; Land Registry 2015.</p>
-      </div>
-      <div class="col-md-2">
-        <p> <a href="http://www.w3schools.com">Contact Us</a></p>
-      </div>
+<!-- And the footer -->
+<div class="navbar navbar-default navbar-fixed-bottom">
+  <div id="pg-footer">
+    <div class="container-fluid">
+        <p class="navbar-text pull-left">&copy Land Registry 2015</p>
+        <p class="navbar-text pull-right"><a href="http://www.w3schools.com" class="navbar-link">Contact Us</a></p>
     </div>
   </div>
 </div>
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.0/js/bootstrap.min.js"></script>
 {% endblock %}
+
+
+<div id="main-content" class="container-fluid">
+{% block content %}
+<!-- Put content here -->
+{% endblock %}
+</div>
+
+
+<!-- Uncomment and complete if we need to use custom Javascript
+{% block scripts %}
+{{super()}}
+{% endblock %}
+-->

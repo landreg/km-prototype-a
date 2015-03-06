@@ -1,102 +1,24 @@
-/*.navbar-default {
-    background-color: #0B0C0C;
-    border-color: #0B0C0C;
-}*/
+/* GOV Custom CSS for KM system prototype with GOV styling and bootstrap */
 
+/* Display labels in white text */
 label {
   color: #FFFFFF;
 }
 
-/*#searchArea {
-  font-size: 1em;
-  line-height: 1.25;
-}
-
-   .input, .button {
-    background-color: #00823b;
-    border: medium none;
-    border-radius: 0;
-    box-shadow: 0 2px 0 #003518;
-    color: #fff;
-    cursor: pointer;
-    display: inline-block;
-    font-size: 1em;
-    line-height: 1.25;
-    margin: 0 15px 15px 0;
-    padding: 0.52632em 0.78947em 0.26316em;
-    position: relative;
-    text-decoration: none;
-    vertical-align: top;
-}*/
-
-/* Sticky footer styles
--------------------------------------------------- */
-
-html,
 body {
-  height: 100%;
-/*  color: #0B0C0C; */
-  /* The html and body elements cannot have any padding or margin. */
+  padding-top: 75px;
+  padding-bottom: 75px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
-/*#submit {
-  color: #00823B;
-}*/
-
-
-/* Wrapper for page content to push down footer */
-#wrap {
-  min-height: 100%;
-  height: auto !important;
-  height: 100%;
-  /* Negative indent footer by it's height */
-  margin: 0 auto -30px;
-  /*margin: 0 auto 5%;*/
-}
-
-/* Set the fixed height of the footer here */
-#push,
-#footer {
-  height: 30px;
-  /*height: 5%; */
-}
-#footer {
-  background-color: #BFC1C3;
-}
-
-/*#footer {
-    background-color: #f5f5f5;
-    bottom: 0;
-    height: 60px;
-    position: absolute;
-    width: 100%;
-}*/
-
-/* Lastly, apply responsive CSS fixes as necessary */
-@media (max-width: 767px) {
-  #footer {
-    margin-left: -20px;
-    margin-right: -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-
-
-/*------------------------------------------------------*/
-#banner {
-  height: 50px;
-}
-#banner {
+#pg-header {
+  height: 75px;
   background-color: #000000;
 }
 
-/* Lastly, apply responsive CSS fixes as necessary */
-@media (max-width: 767px) {
-  #banner {
-    margin-left: -20px;
-    margin-right: -20px;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+.panel-success > .panel-heading {
+    background-color: #DEE0E2;
+    border-color: #DEE0E2;
+    color: #000000;
 }

@@ -1,72 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon"
-          href="https://assets.digital.cabinet-office.gov.uk/static/favicon-9269d2d9f40d20236f60a3dbc448679a.ico"
-          type="image/x-icon">
-    <link href="{{ url_for('static', filename='../static/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='../static/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
-</head>
+{% extends "bootstrap/base.html" %}
 
-<body>
-  <header role="banner" id="global-header" class="">
-      <div class="header-wrapper">
-          <div class="navbar">
-              <div class="navbar-inner">
-                  <div class="container-fluid">
-                      <div class="row">
-                          <div class="span1">
-                          </div>
-                          <a class="brand" href="https://www.gov.uk/" title="Go to the GOV.UK homepage" id="logo">
+{% block title %}Knowledge Managment{% endblock %}
 
-                              <img src="../static/images/logo-black-background.gif/" width="35" height="31" alt="">
-                              Casework Guidance Knowledge Base
+{% block styles %}
+{{super()}}
+<link rel="shortcut icon" href="static/images/logo.png" type="image/x-icon">
+<link rel="stylesheet" href="{{url_for('.static', filename='land-custom.css')}}">
+{% endblock %}
 
-                          </a>
-                      </div>
-                  </div>
-              </div>
-          </div>
-        </div>
-  </header>
-
-
-  <div class="container"></div>
-  <div class="container"></div>
-  <div class="container"></div>
-  <div class="container"></div>
-
-  <!--------------------------- -->
-
-  {% block content %}{% endblock %}
-
-  <!--------------------------- -->
-  <div class="container"></div>
-  <div class="container"></div>
-  <div class="container"></div>
-  <div class="container"></div>
-  <div class="container"></div>
-  <div class="container"></div>
-  <div class="container"></div>
-
-  <div class="container">
-
-
-      <div class="row">
-          <div class="span2">
-          </div>
-          <a href="http://www.landregistry.gov.uk/professional/information/foi/"
-             title="Click to view Freedom of information" style="text-decoration: none">Freedom of information |</a>
-          <a href="http://www.landregistry.gov.uk/professional/terms-and-conditions/copyright-policy"
-             title="Click to view crown copyright" style="text-decoration: none">&copy; Crown copyright 2008</a>
+{% block navbar %}
+<!-- Header navbar construct -->
+<div class="navbar navbar-default navbar-fixed-top">
+  <div id="pg-header">
+    <div class="row>">
+      <div class="col-md-12">
+        <label><h3>Casework Guidance Knowledge Base</h3></label>
       </div>
+    </div>
   </div>
+</div>
+<!-- And the footer -->
+<div class="navbar navbar-default navbar-fixed-bottom">
+  <div id="pg-footer">
+    <div class="container-fluid">
+        <p class="navbar-text pull-left">&copy Land Registry 2015</p>
+        <p class="navbar-text pull-right"><a href="http://www.w3schools.com" class="navbar-link">Contact Us</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
 
 
+<div id="main-content" class="container-fluid">
+{% block content %}
+<!-- Put content here -->
+{% endblock %}
+</div>
 
-</body>
-<script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
-<script src="{{ url_for('static', filename='../static/bootstrap/js/bootstrap.min.js') }}"></script>
-</html>
+
+<!-- Uncomment and complete if we need to use custom Javascript
+{% block scripts %}
+{{super()}}
+{% endblock %}
+-->
