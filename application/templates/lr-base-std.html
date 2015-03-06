@@ -1,0 +1,55 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Knowledge Managment{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="shortcut icon" href="static/images/logo.png" type="image/x-icon">
+<link rel="stylesheet" href="{{url_for('.static', filename='lr-standard.css')}}">
+<link href="//netdna.bootstrapcdn.com/bootswatch/3.0.0/default/bootstrap.min.css" rel="stylesheet" title="main">
+{% endblock %}
+
+{% block navbar %}
+<!-- Header navbar construct -->
+<div class="navbar navbar-default navbar-fixed-top">
+  <div id="pg-header">
+<!--      <img src="{{url_for('.static', filename='images/Land-Registry.png')}}" height="70" alt=""> -->
+      <a class="navbar-brand" href="#"label>Casework Guidance Knowledge Base</a>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown" id="theme-dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Change Theme <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#" class="change-style-menu-item" rel="default"> Bootstrap Standard (Default)</a></li>
+          <li><a href="#" class="change-style-menu-item" rel="cyborg"> Cyborg</a></li>
+          <li><a href="#" class="change-style-menu-item" rel="cerulean"> Cerulean</a></li>
+          <li><a href="#" class="change-style-menu-item" rel="flatly"> Flatly</a></li>
+          <li><a href="#" class="change-style-menu-item" rel="journal"> Journal</a></li>
+          <li><a href="#" class="change-style-menu-item" rel="readable"> Readable</a></li>
+          <li><a href="#" class="change-style-menu-item" rel="united"> United</a></li>
+        </li>
+      </ul>
+  </div>
+</div>
+<!-- And the footer -->
+<div class="navbar navbar-default navbar-fixed-bottom">
+  <div id="pg-footer">
+    <div class="container-fluid">
+        <p class="navbar-text pull-left">&copy Land Registry 2015</p>
+        <p class="navbar-text pull-right"><a href="http://www.w3schools.com" class="navbar-link">Contact Us</a></p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+<div id="main-content" class="container-fluid">
+{% block content %}
+<!-- Put content here -->
+{% endblock %}
+</div>
+
+<!-- Uncomment and complete if we need to use custom Javascript -->
+{% block scripts %}
+{{super()}}
+<script src="{{url_for('.static', filename='javascripts/lr-style-selector.js')}}"></script>
+{% endblock %}
