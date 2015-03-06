@@ -9,11 +9,11 @@ import array
 #ES_HOST = {"host" : "http://192.168.50.7", "port" : 9200}
 #INDEX_NAME = 'knowledge'
 #TYPE_NAME = 'information'
-REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgetest/information' #for testing
+REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/information' #for testing
 
 #REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
 
-#cp94zbqxv3:estftr8mkx@
+#https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgetest/information
 USR = 'cp94zbqxv3'
 PWD = 'estftr8mkx'
 

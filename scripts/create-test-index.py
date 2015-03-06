@@ -3,7 +3,7 @@
 FILE_URL = "file:///vagrant/test-data.csv"
 REMOTE_URL = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/'
 #ES_HOST = {"host" : "localhost", "port" : 9200}
-INDEX_NAME = 'knowledgetest'
+INDEX_NAME = 'knowledge'
 TYPE_NAME = 'information'
 ID_FIELD = 'itemid'
 
