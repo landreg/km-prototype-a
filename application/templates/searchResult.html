@@ -1,91 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon"
-          href="https://assets.digital.cabinet-office.gov.uk/static/favicon-9269d2d9f40d20236f60a3dbc448679a.ico"
-          type="image/x-icon">
-    <link href="../static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/custom.css">
-    <link href="../static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-</head>
+{% extends "base.html" %}
 
-<body>
-  <header role="banner" id="global-header" class="">
-      <div class="header-wrapper">
-          <div class="navbar">
-              <div class="navbar-inner">
-                  <div class="container-fluid">
-                      <div class="row">
-                          <div class="span1">
-                          </div>
-                          <a class="brand" href="https://www.gov.uk/" title="Go to the GOV.UK homepage" id="logo">
-
-                              <img src="../static/images/logo-black-background.gif/" width="35" height="31" alt="">
-                              Casework Guidance Knowledge Base
-
-                          </a>
-                      </div>
-                  </div>
-              </div>
-          </div>
-        </div>
-  </header>
-
-    <div class="container">
-      <!--<p>My string:</p>
-      <p>Value from the list: {{subtitleElements[0]}}</p>
-      <p>The following sub titles have been found:</p>
-      <ul>
-        {% for n in subtitleElements %}
-        <li> <a href="/page">{{n}}</a> </li>
-        {% endfor %}
-      </ul>-->
-    </div>
-
-    <div class="container"></div>
-    <div class="container"></div>
-    <div class="container"></div>
-    <div class="container"></div>
-    <div class="container">
+{% block content %}
 
       <div class="row">
-        <div class="span2"></div>
-        <div class="span3"><h1>Search Result:</h1></div>
-        <ul>
-          {% for n in titleElements %}
-          <div class="span3"> <a href="/page">{{n}}</a> </div>
-          {% endfor %}
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-10">
+          <h1>Search Result:</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-10">
+          <ul>
+            {% for n in titleElements %}
+            <div class="col-md-8"> <a href="/page">{{n}}</a> </div>
+            {% endfor %}
           </ul>
+        </div>
       </div>
 
-  </div>
-
-    <div class="container"></div>
-    <div class="container"></div>
-    <div class="container"></div>
-    <div class="container"></div>
-    <div class="container"></div>
-    <div class="container"></div>
-    <div class="container"></div>
-
-    <div class="container">
-
-
-        <div class="row">
-            <div class="span2">
-            </div>
-            <a href="http://www.landregistry.gov.uk/professional/information/foi/"
-               title="Click to view Freedom of information" style="text-decoration: none">Freedom of information |</a>
-            <a href="http://www.landregistry.gov.uk/professional/terms-and-conditions/copyright-policy"
-               title="Click to view crown copyright" style="text-decoration: none">&copy; Crown copyright 2008</a>
-        </div>
-    </div>
-
-
-
-  </body>
-  <script src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
-  <script src="../static/bootstrap/js/bootstrap.min.js"></script>
-  </html>
+{% endblock %}

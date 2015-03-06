@@ -17,6 +17,8 @@ body {
   background-color: #000000;
 }
 
-/*#gov-panel{
-  background-color:#BFC1C3;
-}*/
+.panel-success > .panel-heading {
+    background-color: #DEE0E2;
+    border-color: #DEE0E2;
+    color: #000000;
+}
