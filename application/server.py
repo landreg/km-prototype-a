@@ -5,6 +5,13 @@ from forms import searchForm
 from ElastSearch import SearchDataOnMeta, SearchDataOnId
 
 storeditemid = 1
+
+
+@app.route('/')
+def landing():
+    return render_template('landing.html')
+
+
 @app.route('/test', methods=['GET','POST'])
 def displaySearchResult():
 
@@ -74,6 +81,10 @@ def lrcontentstatic():
     form = searchForm()
     return render_template('lr-content.html')
 
+@app.route('/gov-content-static')
+def govcontentstatic():
+    return render_template('gov-content.html')
+
 @app.route('/lr-page/<int:itemid>', methods=['GET'])
 def displayLrPage(itemid):
 
@@ -106,3 +117,36 @@ def lrcontent():
         print storeditemid
 
         return render_template('lr-page.html',searchElements=body)
+
+@app.route('/gov-page', methods=['GET'])
+def govcontent():
+        global storeditemid
+
+        itemid = storeditemid
+        res = SearchDataOnId(str(itemid))
+
+        for hit in res['hits']['hits']:
+            body = (hit["_source"]["body"])
+            title = (hit["_source"]["title"])
+            subtitle = (hit["_source"]["sub title"])
+
+        print storeditemid
+
+        return render_template('page.html',searchElements=body)
+
+@app.route('/gov-page/<int:itemid>', methods=['GET'])
+def displayGovPage(itemid):
+
+    global storeditemid
+
+    storeditemid = itemid
+    res = SearchDataOnId(str(itemid))
+
+    for hit in res['hits']['hits']:
+        body = (hit["_source"]["body"])
+        title = (hit["_source"]["title"])
+        subtitle = (hit["_source"]["sub title"])
+
+    print storeditemid
+
+    return render_template('page.html',searchElements=body)
