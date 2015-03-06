@@ -5,12 +5,15 @@ import array
 #import requests
 
 
-URL = 'http://192.168.50.7:9200/knowledge/information'
-ES_HOST = {"host" : "http://192.168.50.7", "port" : 9200}
-INDEX_NAME = 'knowledge'
-TYPE_NAME = 'information'
-REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/information'
-#cp94zbqxv3:estftr8mkx@
+#URL = 'http://192.168.50.7:9200/knowledgetest/information'
+#ES_HOST = {"host" : "http://192.168.50.7", "port" : 9200}
+#INDEX_NAME = 'knowledge'
+#TYPE_NAME = 'information'
+REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/information' #for testing
+
+#REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
+
+#https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgetest/information
 USR = 'cp94zbqxv3'
 PWD = 'estftr8mkx'
 
@@ -31,29 +34,18 @@ def SearchDataOnId(data):
 
 def SearchDataOnMeta(data):
 
+    #authenticate the ES URL
     passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
     passman.add_password(None, REMOTE_URL, USR, PWD)
     auth_handler = urllib2.HTTPBasicAuthHandler(passman)
     opener = urllib2.build_opener(auth_handler)
     urllib2.install_opener(opener)
 
+    #open the URL
     url = REMOTE_URL+'/_search?q=meta:'+data+'&size=5'
     out = urllib2.urlopen(url)
-
-    
-
-    #req = urllib2.Request(url)
-    #out = urllib2.urlopen(url)
     res = out.read()
-    #print data
-    # returned data is JSON
     res = json.loads(res)
-    # total number of results
-    #print data['hits']['total']
-
-    #code to get at the _source
-    #for hit in data['hits']['hits']:
-        #print = (hit["_source"])
 
     return res
 
