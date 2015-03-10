@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect
 from application import app
 from flask import render_template
 from forms import searchForm
-from ElastSearch import SearchDataOnMeta, SearchDataOnId
+from ElastSearch import SearchDataOnMeta, SearchDataOnId, SearchDataOnRelated
 
 #Store current item ID - defualt to first item
 storeditemid = 1
@@ -43,6 +43,7 @@ def searchResult():
 
     res = SearchDataOnMeta(form.searchString.data)
 
+    hit = res['hits']['hits']
     for hit in res['hits']['hits']:
         BodyList.append(hit["_source"]["body"])
         TitleList.append(hit["_source"]["title"])
@@ -58,14 +59,25 @@ def displayLrPage(itemid):
     global storeditemid
 
     storeditemid = itemid
-    res = SearchDataOnId(str(itemid))
+    prime_res = SearchDataOnId(str(itemid))
+    related_res = SearchDataOnRelated(str(itemid))
 
-    for hit in res['hits']['hits']:
-        body = (hit["_source"]["body"])
-        title = (hit["_source"]["title"])
-        subtitle = (hit["_source"]["sub title"])
+    for hit in prime_res['hits']['hits']:
+        pr_body = (hit["_source"]["body"])
+        pr_title = (hit["_source"]["title"])
+        pr_subtitle = (hit["_source"]["sub title"])
+    
+    related_id = []
+    related_title = []
+    related_subtitle = []
+    
+    for hit in related_res['hits']['hits']:
+        related_id.append(hit["_source"]["itemid"])
+        related_title.append(hit["_source"]["title"])
+        related_subtitle.append(hit["_source"]["sub title"])
+    print related_id+related_title+related_subtitle
 
-    return render_template('lr-page.html',searchElements=body)
+    return render_template('lr-page.html',searchElements=pr_body, rl_id = related_id, rl_title = related_title, rl_subtitle = related_subtitle)
 
 @app.route('/gov-page/<int:itemid>', methods=['GET'])
 def displayGovPage(itemid):

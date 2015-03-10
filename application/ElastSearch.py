@@ -32,6 +32,15 @@ def SearchDataOnId(data):
 
     return res
 
+def SearchDataOnRelated(data):
+    #open the URL
+    url = REMOTE_URL+'/_search?q=related:'+data+'&size=5'
+    out = urllib2.urlopen(url)
+    res = out.read()
+    res = json.loads(res)
+    
+    return res    
+
 def SearchDataOnMeta(data):
 
     #authenticate the ES URL
