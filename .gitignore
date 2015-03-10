@@ -60,4 +60,5 @@ target/
 # vagrant
 *.vagrant/
 
-data.*
+test-data.*
+live-data.*
