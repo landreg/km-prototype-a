@@ -62,3 +62,6 @@ target/
 
 test-data.*
 live-data.*
+
+*.csv
+*.numbers
