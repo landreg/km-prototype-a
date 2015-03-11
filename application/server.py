@@ -10,7 +10,7 @@ class article(object):
         self.itemid = itemid
         self.subtitle = subtitle
 
-rl_article_list = []
+#rl_article_list = []
 
 #Store current item ID - defualt to first item
 storeditemid = 1
@@ -68,6 +68,8 @@ def searchResult():
 def displayLrPage(itemid):
 
     global storeditemid
+
+    rl_article_list = []
 
     storeditemid = itemid
     prime_res = SearchDataOnId(str(itemid))

@@ -17,11 +17,19 @@ body {
   background-color: green;
 }
 
+/* Standard panel */
+.fixed-panel {
+  min-height: 300px;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
 form input#searchString
 {
   width: 300px;
   height: 37px;
 }
+
 form input#submit
 {
   height: 37px;
