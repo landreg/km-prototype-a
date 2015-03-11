@@ -4,6 +4,14 @@ from flask import render_template
 from forms import searchForm
 from ElastSearch import SearchDataOnMeta, SearchDataOnId, SearchDataOnRelated
 
+class article(object):
+    def __init__(self, title=None, itemid=None, subtitle=None):
+        self.title = title
+        self.itemid = itemid
+        self.subtitle = subtitle
+
+rl_article_list = []
+
 #Store current item ID - defualt to first item
 storeditemid = 1
 
@@ -67,17 +75,13 @@ def displayLrPage(itemid):
         pr_title = (hit["_source"]["title"])
         pr_subtitle = (hit["_source"]["sub title"])
     
-    related_id = []
-    related_title = []
-    related_subtitle = []
-    
+    #create an object list to store related article information
     for hit in related_res['hits']['hits']:
-        related_id.append(hit["_source"]["itemid"])
-        related_title.append(hit["_source"]["title"])
-        related_subtitle.append(hit["_source"]["sub title"])
-    print related_id+related_title+related_subtitle
+        rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["itemid"], hit["_source"]["sub title"]))
+        
+    print article_list[0].title
 
-    return render_template('lr-page.html',searchElements=pr_body, rl_id = related_id, rl_title = related_title, rl_subtitle = related_subtitle)
+    return render_template('lr-page.html',searchElements=pr_body, related_list = rl_article_list)
 
 @app.route('/gov-page/<int:itemid>', methods=['GET'])
 def displayGovPage(itemid):
