@@ -1,11 +1,23 @@
-{% extends "base.html" %}
+{% extends "lr-base.html" %}
 
 {% block content %}
 
-      <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-10">
+<div class="row">
+  <div class="col-md-9">
+    {{searchElements|safe}}
+    <ul>
+      {% for n in titleElements %}
+      <div class="col-md-8"> <a href="/page">{{n}}</a> </div>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="col-md-3">
+  </div>
+</div>
+
+<!--<div class="row">
+  <div class="col-md-9">
+        <div class="col-md-1">
           <h1>Search Result:</h1>
         </div>
       </div>
@@ -19,6 +31,6 @@
             {% endfor %}
           </ul>
         </div>
-      </div>
+      </div> -->
 
 {% endblock %}

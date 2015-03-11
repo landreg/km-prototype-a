@@ -1,23 +1,40 @@
 <!-- extend from base layout -->
-{% extends "base.html" %}
+{% extends "lr-base.html" %}
 
 {% block content %}
 
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+
+
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-4">
     </div>
-    <div class="col-md-10"><h1>Search Guidance</h1>
+    <div class="col-md-4"><h2>Search Guidance</h2>
+    </div>
+    <div class="col-md-3">
     </div>
   </div>
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-md-4">
     </div>
-    <div class="col-md-10">
+    <div class="col-md-4">
       <form method="POST" action="/search-result">
         {{form.searchString}}
         {{form.submit}}
       </form>
      </div>
+     <div class="col-md-3">
+     </div>
   </div>
+
+
+
 
 {% endblock %}

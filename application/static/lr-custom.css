@@ -16,3 +16,14 @@ body {
   height: 75px;
   background-color: green;
 }
+
+form input#searchString
+{
+  width: 300px;
+  height: 37px;
+}
+form input#submit
+{
+  height: 37px;
+  background-color: #6AC36A;
+}

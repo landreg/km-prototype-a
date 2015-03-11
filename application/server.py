@@ -35,10 +35,13 @@ def lrcontentstdstatic():
     return render_template('lr-content-std.html')
 
 #Test search of elasticsearch
-@app.route('/search', methods=['GET'])
+#@app.route('/search', methods=['GET'])
+@app.route('/search')
 def index():
     form = searchForm()
+    #print form
     return render_template('index.html', form=form)
+    #return render_template('index.html')
 
 @app.route('/search-result', methods=['POST'])
 def searchResult():
