@@ -2,7 +2,15 @@ from flask import render_template, flash, redirect
 from application import app
 from flask import render_template
 from forms import searchForm
-from ElastSearch import SearchDataOnMeta, SearchDataOnId
+from ElastSearch import SearchDataOnMeta, SearchDataOnId, SearchDataOnRelated
+
+class article(object):
+    def __init__(self, title=None, itemid=None, subtitle=None):
+        self.title = title
+        self.itemid = itemid
+        self.subtitle = subtitle
+
+rl_article_list = []
 
 #Store current item ID - defualt to first item
 storeditemid = 1
@@ -43,6 +51,7 @@ def searchResult():
 
     res = SearchDataOnMeta(form.searchString.data)
 
+    hit = res['hits']['hits']
     for hit in res['hits']['hits']:
         BodyList.append(hit["_source"]["body"])
         TitleList.append(hit["_source"]["title"])
@@ -58,14 +67,21 @@ def displayLrPage(itemid):
     global storeditemid
 
     storeditemid = itemid
-    res = SearchDataOnId(str(itemid))
+    prime_res = SearchDataOnId(str(itemid))
+    related_res = SearchDataOnRelated(str(itemid))
 
-    for hit in res['hits']['hits']:
-        body = (hit["_source"]["body"])
-        title = (hit["_source"]["title"])
-        subtitle = (hit["_source"]["sub title"])
+    for hit in prime_res['hits']['hits']:
+        pr_body = (hit["_source"]["body"])
+        pr_title = (hit["_source"]["title"])
+        pr_subtitle = (hit["_source"]["sub title"])
 
-    return render_template('lr-page.html',searchElements=body)
+    #create an object list to store related article information
+    for hit in related_res['hits']['hits']:
+        rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["itemid"], hit["_source"]["sub title"]))
+
+    print rl_article_list[0].title
+
+    return render_template('lr-page.html',searchElements=pr_body, related_list = rl_article_list)
 
 @app.route('/gov-page/<int:itemid>', methods=['GET'])
 def displayGovPage(itemid):
