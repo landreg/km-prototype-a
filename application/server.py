@@ -5,10 +5,10 @@ from forms import searchForm
 from ElastSearch import SearchDataOnMeta, SearchDataOnId, SearchDataOnRelated
 
 class article(object):
-    def __init__(self, title=None, itemid=None, subtitle=None):
+    def __init__(self, title=None, itemid=None, scope=None):
         self.title = title
         self.itemid = itemid
-        self.subtitle = subtitle
+        self.scope = scope
 
 #rl_article_list = []
 
@@ -50,7 +50,7 @@ def searchResult():
     SearchList = []
     BodyList = []
     TitleList = []
-    SubtitleList = []
+    ScopeList = []
 
     res = SearchDataOnMeta(form.searchString.data)
 
@@ -58,7 +58,7 @@ def searchResult():
     for hit in res['hits']['hits']:
         BodyList.append(hit["_source"]["body"])
         TitleList.append(hit["_source"]["title"])
-        SubtitleList.append(hit["_source"]["sub title"])
+        ScopeList.append(hit["_source"]["scope"])
 
     return render_template('searchResult.html',titleElements=TitleList, bodyElements=BodyList, subtitleElements=BodyList)
 
@@ -78,11 +78,11 @@ def displayLrPage(itemid):
     for hit in prime_res['hits']['hits']:
         pr_body = (hit["_source"]["body"])
         pr_title = (hit["_source"]["title"])
-        pr_subtitle = (hit["_source"]["sub title"])
+        pr_scope = (hit["_source"]["scope"])
 
     #create an object list to store related article information
     for hit in related_res['hits']['hits']:
-        rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["itemid"], hit["_source"]["sub title"]))
+        rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["itemid"], hit["_source"]["scope"]))
 
     print rl_article_list[0].title
 
@@ -99,7 +99,7 @@ def displayGovPage(itemid):
     for hit in res['hits']['hits']:
         body = (hit["_source"]["body"])
         title = (hit["_source"]["title"])
-        subtitle = (hit["_source"]["sub title"])
+        scope = (hit["_source"]["scope"])
 
     return render_template('page.html',searchElements=body)
 
@@ -114,6 +114,6 @@ def displayLrPageStd(itemid):
     for hit in res['hits']['hits']:
         body = (hit["_source"]["body"])
         title = (hit["_source"]["title"])
-        subtitle = (hit["_source"]["sub title"])
+        scope = (hit["_source"]["scope"])
 
     return render_template('lr-page-std.html',searchElements=body)
