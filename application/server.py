@@ -5,7 +5,7 @@ from forms import searchForm
 from ElastSearch import SearchDataOnMeta, SearchDataOnId, SearchDataOnRelated
 
 class article(object):
-    def __init__(self, title=None, itemid=None, subtitle=None):
+    def __init__(self, title=None, itemid=None, scope=None):
         self.title = title
         self.itemid = itemid
         self.scope = scope
