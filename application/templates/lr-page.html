@@ -11,24 +11,12 @@
       <div class="panel-heading">
         <h3 class="panel-title">Related Articles</h3>
       </div>
-      <div class="panel-body" style="min-height: 300px; max-height: 300px;overflow-y: scroll;">
-        <p><a href="/lr-page/3">Transfer Principle</a></p>
-        <p><a href="/lr-page/4">Commonhold</a></p>
-        <p><a href="/lr-page/7">Owner Occupier</a></p>
-        <p><a href="/lr-page/3">Transfer Principle</a></p>
-        <p><a href="/lr-page/4">Commonhold</a></p>
-        <p><a href="/lr-page/7">Owner Occupier</a></p>
-        <p><a href="/lr-page/3">Transfer Principle</a></p>
-        <p><a href="/lr-page/4">Commonhold</a></p>
-        <p><a href="/lr-page/7">Owner Occupier</a></p>
-        <p><a href="/lr-page/3">Transfer Principle</a></p>
-        <p><a href="/lr-page/4">Commonhold</a></p>
-        <p><a href="/lr-page/7">Owner Occupier</a></p>
-        <p><a href="/lr-page/3">Transfer Principle</a></p>
-        <p><a href="/lr-page/4">Commonhold</a></p>
-        <p><a href="/lr-page/7">Owner Occupier</a></p>
+      <div class="panel-body" style="min-height: 300px; max-height: 300px; overflow-y: scroll;">
+        {% for related_articles in related_list %}
+        <p><a href="/lr-page/{{related_articles.itemid}}" data-toggle="tooltip" title="{{related_articles.subtitle}}">{{related_articles.title}}</a></p>
+        {% endfor %}
       </div>
     </div>
-  </div> <!-- RIGHT Column -->
-</div>
+  </div> <!-- End Rightmost column content -->
+</div> <!-- Row -->
 {% endblock %}
