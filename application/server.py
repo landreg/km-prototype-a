@@ -74,12 +74,12 @@ def displayLrPage(itemid):
         pr_body = (hit["_source"]["body"])
         pr_title = (hit["_source"]["title"])
         pr_subtitle = (hit["_source"]["sub title"])
-    
+
     #create an object list to store related article information
     for hit in related_res['hits']['hits']:
         rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["itemid"], hit["_source"]["sub title"]))
-        
-    print article_list[0].title
+
+    print rl_article_list[0].title
 
     return render_template('lr-page.html',searchElements=pr_body, related_list = rl_article_list)
 
