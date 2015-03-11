@@ -12,7 +12,7 @@
       </div>
       <div class="panel-body fixed-panel">
         {% for related_articles in related_list %}
-        <p><a id="related_article_id_{{related_articles.itemid}}" href="/lr-page/{{related_articles.itemid}}" data-toggle="tooltip" title="{{related_articles.subtitle}}">{{related_articles.title}}</a></p>
+        <p><a id="related_article_id_{{related_articles.itemid}}" href="/lr-page/{{related_articles.itemid}}" data-toggle="tooltip" title="{{related_articles.scope}}">{{related_articles.title}}</a></p>
         {% endfor %}
       </div>
     </div>
