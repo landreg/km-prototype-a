@@ -1,20 +1,10 @@
 /* LR Custom CSS for KM system prototype with LR styling and bootstrap */
 
-/* Display labels in white text */
-label {
-  color: #FFFFFF;
-}
-
 body {
   padding-top: 75px;
   padding-bottom: 75px;
   padding-left: 15px;
   padding-right: 15px;
-}
-
-#pg-header {
-  height: 75px;
-  background-color: green;
 }
 
 /* Standard panel */
