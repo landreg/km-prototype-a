@@ -89,7 +89,7 @@ def displayLrPage(itemid):
     for hit in related_res['hits']['hits']:
         rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["itemid"], hit["_source"]["scope"]))
 
-    print rl_article_list[0].title
+    #print rl_article_list[0].title
 
     return render_template('lr-page.html',searchElements=pr_body, related_list = rl_article_list)
 
@@ -122,11 +122,3 @@ def displayLrPageStd(itemid):
         scope = (hit["_source"]["scope"])
 
     return render_template('lr-page-std.html',searchElements=body)
-
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template('404.html'), 404
-
-@app.errorhandler(400)
-def bad_request(error):
-    return render_template('400.html'), 400
