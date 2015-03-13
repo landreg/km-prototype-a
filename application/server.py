@@ -16,8 +16,7 @@ class article(object):
 storeditemid = 1
 
 #Demonstration landing page
-@app.route('/')
-@app.route('/index')
+@app.route('/landing')
 def landing():
     return render_template('landing.html')
 
@@ -35,32 +34,38 @@ def lrcontentstdstatic():
     return render_template('lr-content-std.html')
 
 #Test search of elasticsearch
-#@app.route('/search', methods=['GET'])
+@app.route('/')
+@app.route('/index')
 @app.route('/search')
 def index():
     form = searchForm()
-    #print form
     return render_template('index.html', form=form)
-    #return render_template('index.html')
 
 @app.route('/search-result', methods=['POST'])
 def searchResult():
     form = searchForm()
 
-    SearchList = []
-    BodyList = []
-    TitleList = []
-    ScopeList = []
+    noResults = "<h2>Your search did not match any articles</h2><p><a id=\"no_article\" href=\"/search\">Click here to search again</a></p>"
+    searchResults = ""
 
-    res = SearchDataOnMeta(form.searchString.data)
+    if form.searchString.data != "":
 
-    hit = res['hits']['hits']
-    for hit in res['hits']['hits']:
-        BodyList.append(hit["_source"]["body"])
-        TitleList.append(hit["_source"]["title"])
-        ScopeList.append(hit["_source"]["scope"])
+        res = SearchDataOnMeta(form.searchString.data)
+        hit = res['hits']['hits']
 
-    return render_template('searchResult.html',titleElements=TitleList, bodyElements=BodyList, subtitleElements=BodyList)
+        for hit in res['hits']['hits']:
+
+            articleId = hit["_source"]["itemid"]
+            searchResults += "<h2><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h2>"
+            searchResults += "<p>" + hit["_source"]["scope"] + "</p>"
+
+        if searchResults == "":
+            searchResults = noResults
+    else:
+
+        return render_template('index.html', form=form)
+
+    return render_template('searchResult.html',searchElements=searchResults)
 
 
 #Select your theme
@@ -117,3 +122,11 @@ def displayLrPageStd(itemid):
         scope = (hit["_source"]["scope"])
 
     return render_template('lr-page-std.html',searchElements=body)
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+@app.errorhandler(400)
+def bad_request(error):
+    return render_template('400.html'), 400

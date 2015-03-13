@@ -3,6 +3,7 @@
 
 {% block content %}
 
+  <!-- Set vertical position -->
   <div class="row"><div class="col-md-12"><p> </p></div></div>
   <div class="row"><div class="col-md-12"><p> </p></div></div>
   <div class="row"><div class="col-md-12"><p> </p></div></div>
@@ -11,30 +12,28 @@
   <div class="row"><div class="col-md-12"><p> </p></div></div>
   <div class="row"><div class="col-md-12"><p> </p></div></div>
   <div class="row"><div class="col-md-12"><p> </p></div></div>
-
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <!--  -->
 
   <div class="row">
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-4"><h2>Search Guidance</h2>
-    </div>
-    <div class="col-md-3">
+    <div class="center-block" style="width:350px;">
+      <h1>Search Guidance</h1>
     </div>
   </div>
   <div class="row">
-    <div class="col-md-4">
-    </div>
-    <div class="col-md-4">
+    <div class="center-block" style="width:400px;">
       <form method="POST" action="/search-result">
         {{form.searchString}}
         {{form.submit}}
       </form>
-     </div>
-     <div class="col-md-3">
-     </div>
+    </div>
   </div>
-
-
-
 
 {% endblock %}

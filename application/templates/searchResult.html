@@ -3,34 +3,20 @@
 {% block content %}
 
 <div class="row">
-  <div class="col-md-9">
-    {{searchElements|safe}}
-    <ul>
-      {% for n in titleElements %}
-      <div class="col-md-8"> <a href="/page">{{n}}</a> </div>
-      {% endfor %}
-    </ul>
-  </div>
-  <div class="col-md-3">
-  </div>
-</div>
-
-<!--<div class="row">
-  <div class="col-md-9">
-        <div class="col-md-1">
-          <h1>Search Result:</h1>
-        </div>
+  <div class="col-md-9">{{searchElements|safe}}</div>
+<!--  <div class="col-md-3"></div> -->
+  <div class="col-md-3"> <!-- Rightmost column content -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Refine By</h3>
       </div>
-      <div class="row">
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-10">
-          <ul>
-            {% for n in titleElements %}
-            <div class="col-md-8"> <a href="/page">{{n}}</a> </div>
-            {% endfor %}
-          </ul>
-        </div>
-      </div> -->
+      <div class="panel-body fixed-panel">
+      <!--  {% for related_articles in related_list %}
+        <p><a id="related_article_id_{{related_articles.itemid}}" href="/lr-page/{{related_articles.itemid}}" data-toggle="tooltip" title="{{related_articles.scope}}">{{related_articles.title}}</a></p>
+        {% endfor %} -->
+      </div>
+    </div>
+  </div> <!-- End Rightmost column content -->
+</div>
 
 {% endblock %}
