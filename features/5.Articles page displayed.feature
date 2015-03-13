@@ -1,3 +1,4 @@
+@US5 @All
 Feature: 5.Articles page displayed
 
 Scenario: As a user I want to access the knowledge article page

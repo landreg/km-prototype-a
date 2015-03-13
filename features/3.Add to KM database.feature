@@ -1,3 +1,4 @@
+@US3 @All
 Feature: 3.Add to KM database
 
 Scenario: As a KM author I want to add a new knowledge article to the elastic search database
