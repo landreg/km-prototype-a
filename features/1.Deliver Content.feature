@@ -1,3 +1,4 @@
+@US1 @All
 Feature:1.Deliver Content
 
 Scenario: Deliver Content

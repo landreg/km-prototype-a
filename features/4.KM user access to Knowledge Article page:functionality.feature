@@ -1,3 +1,4 @@
+@US4 @All
 Feature: 4.KM user access to Knowledge Article page/functionality
 
 Scenario: As a KM author I want to access a new knowledge article page
