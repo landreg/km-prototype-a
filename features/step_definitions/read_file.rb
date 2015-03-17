@@ -182,3 +182,54 @@ end
 Then(/^the correct data for the Contact Us link is displayed$/) do
   assert page.has_content?("w3schools.com")
 end
+
+#Sprint 2
+#US10/DS10.Add 'related to', to a Knowledge Article
+Given(/^I am on a Knowledge Article page$/) do
+  access_Article_page
+end
+
+When(/^a Related Article link is displayed on the page$/) do
+  assert page.has_content?('Related Articles')
+end
+
+Then(/^a link is displayed under the Related Article$/) do
+  assert page.has_content?('Transfer')
+end
+
+#US11/DS11.Link from 'Related Articles', to a Knowledge Article
+Given(/^I access a Knowledge Article page$/) do
+  access_Article_page
+end
+
+Given(/^a 'Related Articles' panel is displayed$/) do
+  assert page.has_content?('Related Articles')
+end
+
+When(/^I select the 'Related Articles' panel link$/) do
+  click_link('Transfer')
+end
+
+Then(/^structured data relating to the article is returned$/) do
+  assert page.has_content?("One of the first examples was the Lefschetz principle")
+end
+
+#US12/DS12 Hover function - tests title in hover
+Given(/^a Related Articles panel is displayed$/) do
+  assert page.has_content?("Related Articles")
+end
+
+When(/^I hover over a link in the Related Articles panel the data relating to the link is displayed$/) do
+  title = find(:xpath, './/*[@id="related_article_id_3"]')['title']
+
+  assert_match title, "Information on how to process a transfer"
+end
+
+#US13/DS13.Related Articles links to new page with Related Articles
+Then(/^when I select another link$/) do
+  click_link('related_article_id_1')
+end
+
+Then(/^data relating to the link is returned$/) do
+  assert page.has_content?("Types of chargés")
+end
