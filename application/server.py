@@ -15,6 +15,9 @@ class article(object):
 #Store current item ID - defualt to first item
 storeditemid = 1
 
+#########################################################################################################################
+### Redundant code used from static code demonstration and multiple themes
+#########################################################################################################################
 #Demonstration landing page
 @app.route('/landing')
 def landing():
@@ -32,6 +35,39 @@ def govcontentstatic():
 @app.route('/lr-content-std-static')
 def lrcontentstdstatic():
     return render_template('lr-content-std.html')
+
+#Select your theme    
+@app.route('/gov-page/<int:itemid>', methods=['GET'])
+def displayGovPage(itemid):
+
+    global storeditemid
+
+    storeditemid = itemid
+    res = NewSearchDataOnId(str(itemid))
+
+    for hit in res['hits']['hits']:
+        body = (hit["_source"]["content"])
+        title = (hit["_source"]["title"])
+        scope = (hit["_source"]["scope"])
+
+    return render_template('page.html',searchElements=body)
+
+@app.route('/lr-page-std/<int:itemid>', methods=['GET'])
+def displayLrPageStd(itemid):
+
+    global storeditemid
+
+    storeditemid = itemid
+    res = NewSearchDataOnId(str(itemid))
+
+    for hit in res['hits']['hits']:
+        body = (hit["_source"]["content"])
+        title = (hit["_source"]["title"])
+        scope = (hit["_source"]["scope"])
+
+    return render_template('lr-page-std.html',searchElements=body)
+
+#########################################################################################################################
 
 #Test search of elasticsearch
 @app.route('/')
@@ -68,7 +104,7 @@ def searchResult():
     return render_template('searchResult.html',searchElements=searchResults)
 
 
-#Select your theme
+
 @app.route('/lr-page/<itemid>', methods=['GET'])
 def displayLrPage(itemid):
 
@@ -92,33 +128,3 @@ def displayLrPage(itemid):
     #print rl_article_list[0].title
 
     return render_template('lr-page.html',searchElements=pr_body, related_list = rl_article_list)
-
-@app.route('/gov-page/<int:itemid>', methods=['GET'])
-def displayGovPage(itemid):
-
-    global storeditemid
-
-    storeditemid = itemid
-    res = NewSearchDataOnId(str(itemid))
-
-    for hit in res['hits']['hits']:
-        body = (hit["_source"]["content"])
-        title = (hit["_source"]["title"])
-        scope = (hit["_source"]["scope"])
-
-    return render_template('page.html',searchElements=body)
-
-@app.route('/lr-page-std/<int:itemid>', methods=['GET'])
-def displayLrPageStd(itemid):
-
-    global storeditemid
-
-    storeditemid = itemid
-    res = NewSearchDataOnId(str(itemid))
-
-    for hit in res['hits']['hits']:
-        body = (hit["_source"]["content"])
-        title = (hit["_source"]["title"])
-        scope = (hit["_source"]["scope"])
-
-    return render_template('lr-page-std.html',searchElements=body)
