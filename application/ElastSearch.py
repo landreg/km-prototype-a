@@ -9,6 +9,7 @@ import array
 #ES_HOST = {"host" : "http://192.168.50.7", "port" : 9200}
 #INDEX_NAME = 'knowledge'
 #TYPE_NAME = 'information'
+
 REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/information' #for testing
 
 #REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
@@ -38,8 +39,8 @@ def SearchDataOnRelated(data):
     out = urllib2.urlopen(url)
     res = out.read()
     res = json.loads(res)
-    
-    return res    
+
+    return res
 
 def SearchDataOnMeta(data):
 
