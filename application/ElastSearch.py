@@ -10,20 +10,21 @@ import requests
 #INDEX_NAME = 'knowledge'
 #TYPE_NAME = 'information'
 
-#REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/information' #for testing
+REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/information' #for testing
 
-REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
+#REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
 
-REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
+#REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
 
-#https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgetest/information
+REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgetest/information'
+
 USR = 'cp94zbqxv3'
 PWD = 'estftr8mkx'
 
 def NewSearchOnItem(data):
     payload = json.dumps({"query": {"match" : {"items.item" : data}}})
     headers = {'content-type': 'application/json'}
-    
+
     res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
     res = json.loads(res.text)
 
@@ -46,7 +47,7 @@ def NewSearchOnId(data):
 def NewSearchContent(data):
     payload = json.dumps({"query": {"match" : {"content": data}}})
     headers = {'content-type': 'application/json'}
-    
+
     res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
     res = json.loads(res.text)
 
@@ -74,8 +75,8 @@ def SearchDataOnRelated(data):
     out = urllib2.urlopen(url)
     res = out.read()
     res = json.loads(res)
-    
-    return res    
+
+    return res
 
 def SearchDataOnMeta(data):
 
