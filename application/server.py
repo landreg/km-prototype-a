@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect
 from application import app
 from flask import render_template
 from forms import searchForm
-from ElastSearch import SearchDataOnMeta, SearchDataOnId, SearchDataOnRelated
+from ElastSearch import NewSearchDataOnContent, NewSearchDataOnId, NewSearchDataOnRelated
 
 class article(object):
     def __init__(self, title=None, itemid=None, scope=None):
@@ -50,12 +50,12 @@ def searchResult():
 
     if form.searchString.data != "":
 
-        res = SearchDataOnMeta(form.searchString.data)
+        res = NewSearchDataOnContent(form.searchString.data)
         hit = res['hits']['hits']
 
         for hit in res['hits']['hits']:
 
-            articleId = hit["_source"]["itemid"]
+            articleId = hit["_source"]["id"]
             searchResults += "<h2><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h2>"
             searchResults += "<p>" + hit["_source"]["scope"] + "</p>"
 
@@ -69,7 +69,7 @@ def searchResult():
 
 
 #Select your theme
-@app.route('/lr-page/<int:itemid>', methods=['GET'])
+@app.route('/lr-page/<itemid>', methods=['GET'])
 def displayLrPage(itemid):
 
     global storeditemid
@@ -77,17 +77,17 @@ def displayLrPage(itemid):
     rl_article_list = []
 
     storeditemid = itemid
-    prime_res = SearchDataOnId(str(itemid))
-    related_res = SearchDataOnRelated(str(itemid))
+    prime_res = NewSearchDataOnId(str(itemid))
+    related_res = NewSearchDataOnRelated(str(itemid))
 
     for hit in prime_res['hits']['hits']:
-        pr_body = (hit["_source"]["body"])
+        pr_body = (hit["_source"]["content"])
         pr_title = (hit["_source"]["title"])
         pr_scope = (hit["_source"]["scope"])
 
     #create an object list to store related article information
     for hit in related_res['hits']['hits']:
-        rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["itemid"], hit["_source"]["scope"]))
+        rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["id"], hit["_source"]["scope"]))
 
     #print rl_article_list[0].title
 
@@ -99,10 +99,10 @@ def displayGovPage(itemid):
     global storeditemid
 
     storeditemid = itemid
-    res = SearchDataOnId(str(itemid))
+    res = NewSearchDataOnId(str(itemid))
 
     for hit in res['hits']['hits']:
-        body = (hit["_source"]["body"])
+        body = (hit["_source"]["content"])
         title = (hit["_source"]["title"])
         scope = (hit["_source"]["scope"])
 
@@ -114,10 +114,10 @@ def displayLrPageStd(itemid):
     global storeditemid
 
     storeditemid = itemid
-    res = SearchDataOnId(str(itemid))
+    res = NewSearchDataOnId(str(itemid))
 
     for hit in res['hits']['hits']:
-        body = (hit["_source"]["body"])
+        body = (hit["_source"]["content"])
         title = (hit["_source"]["title"])
         scope = (hit["_source"]["scope"])
 
