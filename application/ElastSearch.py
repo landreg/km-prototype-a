@@ -2,20 +2,56 @@ import urllib2
 import json
 #from elasticsearch import Elasticsearch
 import array
-#import requests
+import requests
 
 
 #URL = 'http://192.168.50.7:9200/knowledgetest/information'
 #ES_HOST = {"host" : "http://192.168.50.7", "port" : 9200}
 #INDEX_NAME = 'knowledge'
 #TYPE_NAME = 'information'
-REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/information' #for testing
 
-#REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
+#REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/information' #for testing
+
+REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
+
+REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
 
 #https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgetest/information
 USR = 'cp94zbqxv3'
 PWD = 'estftr8mkx'
+
+def NewSearchOnItem(data):
+    payload = json.dumps({"query": {"match" : {"items.item" : data}}})
+    headers = {'content-type': 'application/json'}
+    
+    res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
+    res = json.loads(res.text)
+
+    return res
+
+def NewSearchOnId(data):
+    passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+    passman.add_password(None, REMOTE_URL, USR, PWD)
+    auth_handler = urllib2.HTTPBasicAuthHandler(passman)
+    opener = urllib2.build_opener(auth_handler)
+    urllib2.install_opener(opener)
+
+    url = REMOTE_URL+'/'+data
+    out = urllib2.urlopen(url)
+    res = out.read()
+    res = json.loads(res)
+
+    return res
+
+def NewSearchContent(data):
+    payload = json.dumps({"query": {"match" : {"content": data}}})
+    headers = {'content-type': 'application/json'}
+    
+    res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
+    res = json.loads(res.text)
+
+    return res
+
 
 def SearchDataOnId(data):
 
@@ -101,8 +137,11 @@ def SearchDataOnBody(data):
 #res = SearchDataOnBody('mortgage')
 #print (res["hit"])
 
+#res = NewSearchOnItem('chargeWithTransferLease')
+#res = NewSearchOnId('legalEquitableCharge')
+res = NewSearchContent('specifically')
 
-
+print (res)
 
 
 #{"took":3,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":1,"max_score":1.0,"hits":[{"_index":"knowledge","_type":"information","_id":"1","_score":1.0,"_source":{"itemid": "1", "body": "I want a mortgage", "tag": "mortgage, charge, want", "subtitle": "mortgage", "title": "charge"}}]}}
