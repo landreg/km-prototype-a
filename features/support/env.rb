@@ -17,3 +17,5 @@ end
 
 require 'test/unit'
 include Test::Unit::Assertions
+
+page.driver.browser.manage.window.maximize
