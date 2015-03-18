@@ -10,28 +10,19 @@ import requests
 #INDEX_NAME = 'knowledge'
 #TYPE_NAME = 'information'
 
-REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/information' #for testing
+#REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/information' #for testing
 
-#REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
+REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
 
-#REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
+REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
 
-REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgetest/information'
+#REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgetest/information'
 
 USR = 'cp94zbqxv3'
 PWD = 'estftr8mkx'
 
-def NewSearchOnItem(data):
-    payload = json.dumps({"query": {"match" : {"items.item" : data}}})
-    headers = {'content-type': 'application/json'}
-
-    res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
-    res = json.loads(res.text)
-
-    return res
-
-def NewSearchOnId(data):
-    passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+def NewSearchDataOnId(data):
+    '''passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
     passman.add_password(None, REMOTE_URL, USR, PWD)
     auth_handler = urllib2.HTTPBasicAuthHandler(passman)
     opener = urllib2.build_opener(auth_handler)
@@ -42,10 +33,44 @@ def NewSearchOnId(data):
     res = out.read()
     res = json.loads(res)
 
+    return res'''
+    payload = json.dumps({"query": {"match" : {"id": data}}})
+    headers = {'content-type': 'application/json'}
+
+    res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
+    res = json.loads(res.text)
+
     return res
 
-def NewSearchContent(data):
-    payload = json.dumps({"query": {"match" : {"content": data}}})
+#sort_type must be either score popularity
+def NewSearchDataOnContent(data, sort_type):
+    if sort_type == 'score':
+        payload = json.dumps({"query": {"match" : {"content": data}},"sort":["_score"] })
+    elif sort_type == 'popularity':
+        payload = json.dumps({"query": {"match" : {"content": data}},"sort":[{"popularity": {"order": "asc"}}] })
+    elif sort_type == 'date':
+        payload = json.dumps({"query": {"match" : {"content": data}},"sort":[{"lastupdate": {"order": "asc"}}] })    
+    else:
+        payload = json.dumps({"query": {"match" : {"content": data}},"sort":["_score"] })    
+    
+    headers = {'content-type': 'application/json'}
+
+    res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
+    res = json.loads(res.text)
+
+    return res
+
+def NewSearchDataOnItem(data):
+    payload = json.dumps({"query": {"match" : {"items.item" : data}}})
+    headers = {'content-type': 'application/json'}
+
+    res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
+    res = json.loads(res.text)
+
+    return res
+
+def NewSearchDataOnRelated(data):
+    payload = json.dumps({"query": {"match" : {"kmlinks.id": data}}})
     headers = {'content-type': 'application/json'}
 
     res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
@@ -140,9 +165,18 @@ def SearchDataOnBody(data):
 
 #res = NewSearchOnItem('chargeWithTransferLease')
 #res = NewSearchOnId('legalEquitableCharge')
-res = NewSearchContent('specifically')
+#res = NewSearchContent('specifically')
 
-print (res)
+#print (res)
+
+'''res = NewSearchDataOnContent('and', 'score')
+print res
+hit = res['hits']['hits']
+
+for hit in res['hits']['hits']:
+
+    articleId = hit["_source"]["id"]
+    print articleId'''
 
 
 #{"took":3,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":1,"max_score":1.0,"hits":[{"_index":"knowledge","_type":"information","_id":"1","_score":1.0,"_source":{"itemid": "1", "body": "I want a mortgage", "tag": "mortgage, charge, want", "subtitle": "mortgage", "title": "charge"}}]}}
