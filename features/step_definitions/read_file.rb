@@ -233,3 +233,53 @@ end
 Then(/^data relating to the link is returned$/) do
   assert page.has_content?("Types of chargés")
 end
+
+#Sprint 3
+#US15/DS15.Display 'Initial Search' page
+Given(/^I access an 'Initial Search' page$/) do
+  access_search_page
+end
+
+Then(/^an 'Initial Search' page is displayed$/) do
+  assert page.has_content?("Search Guidance")
+end
+
+#US16/DS16.Submit Search and display search result
+When(/^I submit a search$/) do
+  fill_in('searchString', :with=> 'charge')
+  click_button('submit')
+end
+
+Then(/^a search result is displayed$/) do
+  assert page.has_content?("charge")
+end
+
+#US17/DS17.Display sub title to search result
+Given(/^I submit a search on 'lender'$/) do
+  access_search_page
+  fill_in('searchString', :with=> 'lender')
+  click_button('submit')
+end
+
+When(/^the search result is displayed$/) do
+  assert page.has_content?("charge")
+end
+
+Then(/^the scope is displayed on the search result page$/) do
+  assert page.has_content?("Information on how to process a charge")
+end
+
+#US18/DS18.Display sub title to search result
+Given(/^I have navigated to the search results page$/) do
+  access_search_page
+  fill_in('searchString', :with=> 'lender')
+  click_button('submit')
+end
+
+When(/^I select the title on the results page$/) do
+  click_link('charge')
+end
+
+Then(/^the main bodytext is displayed$/) do
+  content("in cases where the two countries lack ambassadorial-level relations.")
+end
