@@ -42,8 +42,17 @@ def NewSearchDataOnId(data):
 
     return res
 
-def NewSearchDataOnContent(data):
-    payload = json.dumps({"query": {"match" : {"content": data}}})
+#sort_type must be either score popularity
+def NewSearchDataOnContent(data, sort_type):
+    if sort_type == 'score':
+        payload = json.dumps({"query": {"match" : {"content": data}},"sort":["_score"] })
+    elif sort_type == 'popularity':
+        payload = json.dumps({"query": {"match" : {"content": data}},"sort":[{"popularity": {"order": "asc"}}] })
+    elif sort_type == 'date':
+        payload = json.dumps({"query": {"match" : {"content": data}},"sort":[{"lastupdate": {"order": "asc"}}] })    
+    else:
+        payload = json.dumps({"query": {"match" : {"content": data}},"sort":["_score"] })    
+    
     headers = {'content-type': 'application/json'}
     
     res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
@@ -160,7 +169,7 @@ def SearchDataOnBody(data):
 
 #print (res)
 
-res = NewSearchDataOnContent('and')
+res = NewSearchDataOnContent('and', 'score')
 hit = res['hits']['hits']
 
 for hit in res['hits']['hits']:

@@ -85,12 +85,13 @@ def searchResult():
     searchResults = ""
 
     if form.searchString.data != "":
-
-        res = NewSearchDataOnContent(form.searchString.data)
+        
+        #pass in 'score' 'date' 'popularity'
+        res = NewSearchDataOnContent(form.searchString.data, 'date')
         hit = res['hits']['hits']
 
         for hit in res['hits']['hits']:
-
+            print hit
             articleId = hit["_source"]["id"]
             searchResults += "<h2><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h2>"
             searchResults += "<p>" + hit["_source"]["scope"] + "</p>"
