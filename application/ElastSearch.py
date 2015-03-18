@@ -170,7 +170,8 @@ def SearchDataOnBody(data):
 #print (res)
 
 res = NewSearchDataOnContent('and', 'score')
-hit = res['hits']['hits']
+print res
+#hit = res['hits']['hits']
 
 for hit in res['hits']['hits']:
 
