@@ -36,7 +36,7 @@ def govcontentstatic():
 def lrcontentstdstatic():
     return render_template('lr-content-std.html')
 
-#Select your theme    
+#Select your theme
 @app.route('/gov-page/<int:itemid>', methods=['GET'])
 def displayGovPage(itemid):
 
@@ -69,7 +69,7 @@ def displayLrPageStd(itemid):
 
 #########################################################################################################################
 
-#Test search of elasticsearch
+#Elasticsearch
 @app.route('/')
 @app.route('/index')
 @app.route('/search')
@@ -81,7 +81,7 @@ def index():
 def searchResult():
     form = searchForm()
 
-    noResults = "<h2>Your search did not match any articles</h2><p><a id=\"no_article\" href=\"/search\">Click here to search again</a></p>"
+    noResults = "<h3>Your search did not match any articles</h3><p><a id=\"no_article\" href=\"/search\">Click here to search again</a></p>"
     searchResults = ""
 
     if form.searchString.data != "":
@@ -92,7 +92,7 @@ def searchResult():
         for hit in res['hits']['hits']:
 
             articleId = hit["_source"]["id"]
-            searchResults += "<h2><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h2>"
+            searchResults += "<h3><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h3>"
             searchResults += "<p>" + hit["_source"]["scope"] + "</p>"
 
         if searchResults == "":
@@ -113,6 +113,8 @@ def displayLrPage(itemid):
     rl_article_list = []
 
     storeditemid = itemid
+
+    
     prime_res = NewSearchDataOnId(str(itemid))
     related_res = NewSearchDataOnRelated(str(itemid))
 
@@ -125,6 +127,5 @@ def displayLrPage(itemid):
     for hit in related_res['hits']['hits']:
         rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["id"], hit["_source"]["scope"]))
 
-    #print rl_article_list[0].title
 
     return render_template('lr-page.html',searchElements=pr_body, related_list = rl_article_list)
