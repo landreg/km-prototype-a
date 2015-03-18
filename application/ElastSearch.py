@@ -21,17 +21,8 @@ REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-
 USR = 'cp94zbqxv3'
 PWD = 'estftr8mkx'
 
-def NewSearchOnItem(data):
-    payload = json.dumps({"query": {"match" : {"items.item" : data}}})
-    headers = {'content-type': 'application/json'}
-
-    res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
-    res = json.loads(res.text)
-
-    return res
-
-def NewSearchOnId(data):
-    passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
+def NewSearchDataOnId(data):
+    '''passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
     passman.add_password(None, REMOTE_URL, USR, PWD)
     auth_handler = urllib2.HTTPBasicAuthHandler(passman)
     opener = urllib2.build_opener(auth_handler)
@@ -42,10 +33,35 @@ def NewSearchOnId(data):
     res = out.read()
     res = json.loads(res)
 
+    return res'''
+    payload = json.dumps({"query": {"match" : {"id": data}}})
+    headers = {'content-type': 'application/json'}
+
+    res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
+    res = json.loads(res.text)
+
     return res
 
-def NewSearchContent(data):
+def NewSearchDataOnContent(data):
     payload = json.dumps({"query": {"match" : {"content": data}}})
+    headers = {'content-type': 'application/json'}
+
+    res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
+    res = json.loads(res.text)
+
+    return res
+
+def NewSearchDataOnItem(data):
+    payload = json.dumps({"query": {"match" : {"items.item" : data}}})
+    headers = {'content-type': 'application/json'}
+
+    res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
+    res = json.loads(res.text)
+
+    return res
+
+def NewSearchDataOnRelated(data):
+    payload = json.dumps({"query": {"match" : {"kmlinks.id": data}}})
     headers = {'content-type': 'application/json'}
 
     res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
@@ -140,9 +156,17 @@ def SearchDataOnBody(data):
 
 #res = NewSearchOnItem('chargeWithTransferLease')
 #res = NewSearchOnId('legalEquitableCharge')
-res = NewSearchContent('specifically')
+#res = NewSearchContent('specifically')
 
-print (res)
+#print (res)
+
+res = NewSearchDataOnContent('and')
+hit = res['hits']['hits']
+
+for hit in res['hits']['hits']:
+
+    articleId = hit["_source"]["id"]
+    print articleId
 
 
 #{"took":3,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":1,"max_score":1.0,"hits":[{"_index":"knowledge","_type":"information","_id":"1","_score":1.0,"_source":{"itemid": "1", "body": "I want a mortgage", "tag": "mortgage, charge, want", "subtitle": "mortgage", "title": "charge"}}]}}
