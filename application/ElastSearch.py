@@ -42,8 +42,17 @@ def NewSearchDataOnId(data):
 
     return res
 
-def NewSearchDataOnContent(data):
-    payload = json.dumps({"query": {"match" : {"content": data}}})
+#sort_type must be either score popularity
+def NewSearchDataOnContent(data, sort_type):
+    if sort_type == 'score':
+        payload = json.dumps({"query": {"match" : {"content": data}},"sort":["_score"] })
+    elif sort_type == 'popularity':
+        payload = json.dumps({"query": {"match" : {"content": data}},"sort":[{"popularity": {"order": "asc"}}] })
+    elif sort_type == 'date':
+        payload = json.dumps({"query": {"match" : {"content": data}},"sort":[{"lastupdate": {"order": "asc"}}] })    
+    else:
+        payload = json.dumps({"query": {"match" : {"content": data}},"sort":["_score"] })    
+    
     headers = {'content-type': 'application/json'}
 
     res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
@@ -160,13 +169,14 @@ def SearchDataOnBody(data):
 
 #print (res)
 
-"""res = NewSearchDataOnContent('and')
+'''res = NewSearchDataOnContent('and', 'score')
+print res
 hit = res['hits']['hits']
 
 for hit in res['hits']['hits']:
 
     articleId = hit["_source"]["id"]
-    print articleId"""
+    print articleId'''
 
 
 #{"took":3,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":1,"max_score":1.0,"hits":[{"_index":"knowledge","_type":"information","_id":"1","_score":1.0,"_source":{"itemid": "1", "body": "I want a mortgage", "tag": "mortgage, charge, want", "subtitle": "mortgage", "title": "charge"}}]}}
