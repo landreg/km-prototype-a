@@ -87,7 +87,7 @@ def searchResult():
     if form.searchString.data != "":
 
         #pass in 'score' 'date' 'popularity'
-        res = NewSearchDataOnContent(form.searchString.data, 'date')
+        res = NewSearchDataOnContent(form.searchString.data, 'date', 2, 1)
         hit = res['hits']['hits']
 
         for hit in res['hits']['hits']:
