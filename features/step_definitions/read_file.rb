@@ -255,31 +255,65 @@ Then(/^a search result is displayed$/) do
 end
 
 #US17/DS17.Display sub title to search result
-Given(/^I submit a search on 'lender'$/) do
+Given(/^I submit a search on 'charge'$/) do
   access_search_page
-  fill_in('searchString', :with=> 'lender')
+  fill_in('searchString', :with=> 'charge')
   click_button('submit')
 end
 
 When(/^the search result is displayed$/) do
-  assert page.has_content?("charge")
+  assert page.has_content?("Charge")
 end
 
 Then(/^the scope is displayed on the search result page$/) do
-  assert page.has_content?("Information on how to process a charge")
+  assert page.has_content?("Charge combined with transfers and leases")
 end
 
 #US18/DS18.Display sub title to search result
 Given(/^I have navigated to the search results page$/) do
   access_search_page
-  fill_in('searchString', :with=> 'lender')
+  fill_in('searchString', :with=> 'charge')
   click_button('submit')
 end
 
 When(/^I select the title on the results page$/) do
-  click_link('charge')
+  click_link('Charge combined with transfers and leases')
 end
 
 Then(/^the main bodytext is displayed$/) do
-  content("in cases where the two countries lack ambassadorial-level relations.")
+  content("Charges combined with transfers or leases are acceptable if an applicant can demonstrate why this would be advantageous.")
+end
+
+#US10a/DS10a.A Related Article link is displayed on a Knowledge Article page
+#(Refactored for new code structure)
+Given(/^I have navigated to a Knowledge Article page$/) do
+  access_search_page
+  fill_in('searchString', :with=> 'charge')
+  click_button('submit')
+  click_link('Charge combined with transfers and leases')
+end
+
+When(/^a Related Articles link is displayed on the page$/) do
+  assert page.has_content?('Related Articles')
+end
+
+Then(/^a Related Article link is displayed$/) do
+  assert page.has_content?('Agreement of occupier to postponement of rights')
+end
+
+#US10b/DS10b.A Related Article link is displayed on a Knowledge Article page
+#(Refactored for new code structure)
+Given(/^a Knowledge Article page is dispayed$/) do
+  access_search_page
+
+  submit
+  click_link('Charge combined with transfers and leases')
+end
+
+When(/^Related External link is displayed on the page$/) do
+  assert page.has_content?('Related External Links')
+end
+
+Then(/^a Related External link can be selected$/) do
+  assert page.has_content?('Agreement of occupier to postponement of rights')
 end
