@@ -85,7 +85,7 @@ def searchResult():
     searchResults = ""
 
     if form.searchString.data != "":
-        
+
         #pass in 'score' 'date' 'popularity'
         res = NewSearchDataOnContent(form.searchString.data, 'date')
         hit = res['hits']['hits']
@@ -102,7 +102,7 @@ def searchResult():
 
         return render_template('index.html', form=form)
 
-    return render_template('searchResult.html',searchElements=searchResults)
+    return render_template('searchResult.html',searchElements=searchResults, form=form)
 
 
 
@@ -115,7 +115,7 @@ def displayLrPage(itemid):
 
     storeditemid = itemid
 
-    
+
     prime_res = NewSearchDataOnId(str(itemid))
     related_res = NewSearchDataOnRelated(str(itemid))
 
