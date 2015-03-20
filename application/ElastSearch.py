@@ -48,7 +48,7 @@ def NewSearchDataOnContent(data, sort_type, page_size, page_number):
         page_from = 1
     else:
         page_from = ((page_number - 1) * page_size) + 1
-    print page_from
+    #print page_from
     
     if sort_type == 'score':
         payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":["_score"] })
@@ -175,8 +175,8 @@ def SearchDataOnBody(data):
 
 #print (res)
 
-'''res = NewSearchDataOnContent('and', 'score', 2, 2)
-#print res
+'''res = NewSearchDataOnContent('and', 'score', 2, 1)
+print res
 hit = res['hits']['hits']
 
 for hit in res['hits']['hits']:

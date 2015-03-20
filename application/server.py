@@ -86,12 +86,13 @@ def searchResult():
 
     if form.searchString.data != "":
         
-        #pass in 'score' 'date' 'popularity'
+        #Parameters: data, sort_type, page_size, page_number
+        #pass in 'score' 'date' 'popularity' for sort_type
         res = NewSearchDataOnContent(form.searchString.data, 'date', 2, 1)
         hit = res['hits']['hits']
-
+        #print res['hits']['total']
         for hit in res['hits']['hits']:
-            print hit
+            #print hit
             articleId = hit["_source"]["id"]
             searchResults += "<h3><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h3>"
             searchResults += "<p>" + hit["_source"]["scope"] + "</p>"
