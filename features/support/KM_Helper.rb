@@ -17,3 +17,8 @@ end
 def content (value1)
   assert page.has_content?(value1), "********** No Matching Text Found ********** "
 end
+
+def submit
+  fill_in('searchString', :with=> 'charge')
+  click_button('submit')
+end
