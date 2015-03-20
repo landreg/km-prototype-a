@@ -16,33 +16,35 @@
            <a class="btn btn-default disabled" role="button" href="">Sort by</a>
 
           {% if searchtype == 'popularity' %}
-            <a  class="btn btn-success" role="button" href="/search-update?search={{search|e}}&searchtype=popularity&pagesize=3&pageno=1">Helpful</a>
-            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=score&pagesize=2&pageno=1">Relevant</a>
-            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=date&pagesize=1&pageno=1">Latest</a>
+            <a  class="btn btn-success" role="button" href="/search-update?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
+            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
+            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
           {% elif searchtype == 'score' %}
 
-            <a  class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=popularity&pagesize=3&pageno=1">Helpful</a>
-            <a class="btn btn-success" role="button" href="/search-update?search={{search|e}}&searchtype=score&pagesize=2&pageno=1">Relevant</a>
-            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=date&pagesize=1&pageno=1">Latest</a>
+            <a  class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
+            <a class="btn btn-success" role="button" href="/search-update?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
+            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
 
-          {% else %}
-            <a  class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=popularity&pagesize=3&pageno=1">Helpful</a>
-            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=score&pagesize=2&pageno=1">Relevant</a>
-            <a class="btn btn-success" role="button" href="/search-update?search={{search|e}}&searchtype=date&pagesize=1&pageno=1">Latest</a>
+          {% elif searchtype == 'date' %}
+            <a  class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
+            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
+            <a class="btn btn-success" role="button" href="/search-update?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
           {% endif %}
 
         </div>
 
+
+
         <div class="btn-group pull-right" aria-label="Justified button group" role="group">
           <div class="btn-group" role="group">
             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-              Results per page
+              {{pagesize}} results per page
               <span class="caret"></span>
             </button>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="#">5</a></li>
-                <li><a href="#">10</a></li>
-                <li><a href="#">100</a></li>
+                <li><a href="/search-update?search={{search|e}}&searchtype={{searchtype|e}}&pagesize=2&pageno=1">2</a></li>
+                <li><a href="/search-update?search={{search|e}}&searchtype={{searchtype|e}}&pagesize=5&pageno=1">5</a></li>
+                <li><a href="/search-update?search={{search|e}}&searchtype={{searchtype|e}}&pagesize=10&pageno=1">10</a></li>
               </ul>
            </div>
 
@@ -60,10 +62,21 @@
 
         </div>
 
+
+
     </div>
     </div>
+    <div class="row>">
+      <div class="col-md-6">
+        <p class="text-left">Search matches {{totalnohits}} results</p>
+      </div>
+      <div class="col-md-6">
+        <p class="text-left"> Page {{pageno}} of 10 </p>
+      </div>
+    </div>
+
     {{searchElements|safe}}
-  
+
   </div>
 
 
