@@ -181,9 +181,9 @@ hit = res['hits']['hits']
 #print hit
 for hit in res['hits']['hits']:
     #print hit
-    for ids in hit['_source']['extlinks']:
-        #print ids
-        articleId = ids['name']
+    for ids in hit['_source']['kmlinks']:
+        print ids
+        articleId = ids['id']
         print articleId'''
 
 
