@@ -9,6 +9,11 @@ class article(object):
         self.title = title
         self.itemid = itemid
         self.scope = scope
+        
+class ext_link(object):
+    def __init__(self, title=None, link=None):
+        self.title = title
+        self.link = link
 
 #rl_article_list = []
 
@@ -113,6 +118,7 @@ def displayLrPage(itemid):
     global storeditemid
 
     rl_article_list = []
+    rl_external_list = []
 
     storeditemid = itemid
 
@@ -124,10 +130,11 @@ def displayLrPage(itemid):
         pr_body = (hit["_source"]["content"])
         pr_title = (hit["_source"]["title"])
         pr_scope = (hit["_source"]["scope"])
-
+        for item in hit['_source']['extlinks']:
+            rl_external_list.append(ext_link(item["name"], item["url"]))
     #create an object list to store related article information
     for hit in related_res['hits']['hits']:
         rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["id"], hit["_source"]["scope"]))
 
 
-    return render_template('lr-page.html',searchElements=pr_body, related_list = rl_article_list)
+    return render_template('lr-page.html',searchElements=pr_body, related_list = rl_article_list, external_list = rl_external_list)

@@ -175,14 +175,16 @@ def SearchDataOnBody(data):
 
 #print (res)
 
-'''res = NewSearchDataOnContent('and', 'score', 2, 1)
-print res
+'''res = NewSearchDataOnContent('and', 'score', 10, 1)
+#print res
 hit = res['hits']['hits']
-
+#print hit
 for hit in res['hits']['hits']:
-
-    articleId = hit["_source"]["id"]
-    print articleId'''
+    #print hit
+    for ids in hit['_source']['extlinks']:
+        #print ids
+        articleId = ids['name']
+        print articleId'''
 
 
 #{"took":3,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":1,"max_score":1.0,"hits":[{"_index":"knowledge","_type":"information","_id":"1","_score":1.0,"_source":{"itemid": "1", "body": "I want a mortgage", "tag": "mortgage, charge, want", "subtitle": "mortgage", "title": "charge"}}]}}
