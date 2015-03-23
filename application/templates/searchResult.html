@@ -1,4 +1,4 @@
-{% extends "lr-base.html" %}
+{% extends "lr-base-search.html" %}
 
 {% block content %}
 
@@ -21,19 +21,19 @@
            <a class="btn btn-default disabled" role="button" href="">Sort by</a>
 
           {% if searchtype == 'popularity' %}
-            <a  class="btn btn-success" role="button" href="/search-update?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
-            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
-            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
+            <a id="helpful" class="btn btn-success" role="button" href="/search-result?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
+            <a id="relevant" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
+            <a id="latest" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
           {% elif searchtype == 'score' %}
 
-            <a  class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
-            <a class="btn btn-success" role="button" href="/search-update?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
-            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
+            <a id="helpful" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
+            <a class="btn btn-success" role="button" href="/search-result?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
+            <a class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
 
           {% elif searchtype == 'date' %}
-            <a  class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
-            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
-            <a class="btn btn-success" role="button" href="/search-update?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
+            <a id="helpful" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
+            <a id="relevant" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
+            <a id="latest" class="btn btn-success" role="button" href="/search-result?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
           {% endif %}
 
         </div>
@@ -47,22 +47,22 @@
               <span class="caret"></span>
             </button>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="/search-update?search={{search|e}}&searchtype={{searchtype|e}}&pagesize=2&pageno=1">2</a></li>
-                <li><a href="/search-update?search={{search|e}}&searchtype={{searchtype|e}}&pagesize=5&pageno=1">5</a></li>
-                <li><a href="/search-update?search={{search|e}}&searchtype={{searchtype|e}}&pagesize=10&pageno=1">10</a></li>
+                <li><a id="pagesizeid1" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize=2&pageno=1">2</a></li>
+                <li><a id="pagesizeid2" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize=5&pageno=1">5</a></li>
+                <li><a id="pagesizeid3" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize=10&pageno=1">10</a></li>
               </ul>
            </div>
 
           {% if pageno == 1 %}
-            <a class="btn btn-default disabled" role="button" href="/search-update?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{prev|e}}">prev</a>
+            <a id="prev" class="btn btn-default disabled" role="button" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{prev|e}}">prev</a>
           {% else %}
-            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{prev|e}}">prev</a>
+            <a id="prev" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{prev|e}}">prev</a>
           {% endif %}
 
           {% if pageno >= totalnohits/pagesize %}
-            <a class="btn btn-default disabled" role="button" href="/search-update?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{next|e}}">next</a>
+            <a id="next" class="btn btn-default disabled" role="button" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{next|e}}">next</a>
           {% else %}
-            <a class="btn btn-default" role="button" href="/search-update?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{next|e}}">next</a>
+            <a id="next" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{next|e}}">next</a>
           {% endif %}
 
         </div>

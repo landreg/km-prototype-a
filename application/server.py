@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect, request
+from flask import render_template, flash, redirect, request, session, make_response
 from application import app
 from flask import render_template
 from forms import searchForm
@@ -76,49 +76,14 @@ def displayLrPageStd(itemid):
 @app.route('/search')
 def index():
     form = searchForm()
+
     return render_template('index.html', form=form)
 
-@app.route('/search-result', methods=['POST'])
-def searchResult():
-    form = searchForm()
 
-    #print "This is the form data 1 " + str(form.searchString.data)
-
-    noResults = "<h3>Your search did not match any articles</h3><p><a id=\"no_article\" href=\"/search\">Click here to search again</a></p>"
-    searchResults = ""
-
-    search = form.searchString.data
-
-    if form.searchString.data != "":
-
-        #print "This is the form data 2 " + str(form.searchString.data)
-
-        #pass in 'score' 'date' 'popularity'
-        res = NewSearchDataOnContent(form.searchString.data, 'date', 5, 1)
-        hit = res['hits']['hits']
-
-        totalNoHits = int(res['hits']['total'])
-        
-        for hit in res['hits']['hits']:
-            #print hit
-            articleId = hit["_source"]["id"]
-            searchResults += "<h3><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h3>"
-            searchResults += "<p>" + hit["_source"]["scope"] + "</p>"
-
-        if searchResults == "":
-            searchResults = noResults
-    else:
-
-        return render_template('index.html', form=form)
-
-    return render_template('searchResult.html',searchElements=searchResults, form=form, search=search,  searchtype='date', totalnohits=totalNoHits, pagesize=5, pageno=1)
-
-@app.route('/search-update', methods=['GET'])
+@app.route('/search-result', methods=['GET'])
 def searchUpdate():
 
     form = searchForm()
-
-    #search=and&searchtype=data&pagesize=5&pageno=1
 
     print request.args.get('search')
     print request.args.get('searchtype')
@@ -126,11 +91,17 @@ def searchUpdate():
     print request.args.get('pageno')
 
     search = request.args.get('search')
-    searchType = request.args.get('searchtype')
-    pageSize = int(request.args.get('pagesize'))
-    pageNo = int(request.args.get('pageno'))
 
+    if request.args.get('searchtype') == None:
+        searchType = 'date'
+        pageNo = 1
+        pageSize = 5
 
+    else:
+
+        searchType = request.args.get('searchtype')
+        pageSize = int(request.args.get('pagesize'))
+        pageNo = int(request.args.get('pageno'))
 
     noResults = "<h3>Your search did not match any articles</h3><p><a id=\"no_article\" href=\"/search\">Click here to search again</a></p>"
     searchResults = ""
@@ -157,10 +128,12 @@ def searchUpdate():
 
         return render_template('index.html', form=form)
 
-    return render_template('searchResult.html', searchElements=searchResults, search=search, searchtype=searchType, totalnohits=totalNoHits, pagesize=pageSize, pageno=pageNo)
+    return render_template('searchResult.html', form=form, searchElements=searchResults, search=search, searchtype=searchType, totalnohits=totalNoHits, pagesize=pageSize, pageno=pageNo)
 
 @app.route('/lr-page/<itemid>', methods=['GET'])
 def displayLrPage(itemid):
+
+    form = searchForm()
 
     global storeditemid
 
@@ -182,4 +155,4 @@ def displayLrPage(itemid):
         rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["id"], hit["_source"]["scope"]))
 
 
-    return render_template('lr-page.html',searchElements=pr_body, related_list = rl_article_list)
+    return render_template('lr-page.html', form=form, searchElements=pr_body, related_list = rl_article_list)
