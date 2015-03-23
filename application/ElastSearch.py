@@ -48,7 +48,7 @@ def NewSearchDataOnContent(data, sort_type, page_size, page_number):
         page_from = 1
     else:
         page_from = ((page_number - 1) * page_size) + 1
-    print page_from
+    #print page_from
     
     if sort_type == 'score':
         payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":["_score"] })
@@ -175,14 +175,16 @@ def SearchDataOnBody(data):
 
 #print (res)
 
-'''res = NewSearchDataOnContent('and', 'score', 2, 2)
+'''res = NewSearchDataOnContent('and', 'score', 10, 1)
 #print res
 hit = res['hits']['hits']
-
+#print hit
 for hit in res['hits']['hits']:
-
-    articleId = hit["_source"]["id"]
-    print articleId'''
+    #print hit
+    for ids in hit['_source']['kmlinks']:
+        print ids
+        articleId = ids['id']
+        print articleId'''
 
 
 #{"took":3,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":1,"max_score":1.0,"hits":[{"_index":"knowledge","_type":"information","_id":"1","_score":1.0,"_source":{"itemid": "1", "body": "I want a mortgage", "tag": "mortgage, charge, want", "subtitle": "mortgage", "title": "charge"}}]}}
