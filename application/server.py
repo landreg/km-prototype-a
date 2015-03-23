@@ -124,17 +124,27 @@ def displayLrPage(itemid):
 
     
     prime_res = NewSearchDataOnId(str(itemid))
-    related_res = NewSearchDataOnRelated(str(itemid))
-
+    #this line will only get articles that have the primary article in THEIR related list only
+    #related_res = NewSearchDataOnRelated(str(itemid))
+    
+    #business requirement is that only articles that their id in the PRIMARY article's related list  
     for hit in prime_res['hits']['hits']:
         pr_body = (hit["_source"]["content"])
         pr_title = (hit["_source"]["title"])
         pr_scope = (hit["_source"]["scope"])
+        for item in hit["_source"]["kmlinks"]:
+            if "id" in item:
+                rl_id = item['id']
+                related_res = NewSearchDataOnId(str(rl_id))
+                #create an object list to store related article information
+                for hit in related_res['hits']['hits']:
+                    rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["id"], hit["_source"]["scope"]))
+            
+        #create an object list to store external related links
         for item in hit['_source']['extlinks']:
-            rl_external_list.append(ext_link(item["name"], item["url"]))
-    #create an object list to store related article information
-    for hit in related_res['hits']['hits']:
-        rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["id"], hit["_source"]["scope"]))
+            if "url" in item:
+                rl_external_list.append(ext_link(item["name"], item["url"]))
+    
 
 
     return render_template('lr-page.html',searchElements=pr_body, related_list = rl_article_list, external_list = rl_external_list)
