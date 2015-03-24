@@ -45,9 +45,9 @@ def NewSearchDataOnId(data):
 #sort_type must be either score popularity date
 def NewSearchDataOnContent(data, sort_type, page_size, page_number):
     if page_number == 1:
-        page_from = 1
+        page_from = 0
     else:
-        page_from = ((page_number - 1) * page_size) + 1
+        page_from = ((page_number - 1) * page_size)
     #print page_from
     
     if sort_type == 'score':
