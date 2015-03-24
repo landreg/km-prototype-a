@@ -127,6 +127,8 @@ def searchUpdate():
             searchResults += "<h3><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h3>"
             searchResults += "<p>" + hit["_source"]["scope"] + "</p>"
 
+            print hit["_source"]["scope"]
+
         if searchResults == "":
             searchResults = noResults
     else:
