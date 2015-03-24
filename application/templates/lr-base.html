@@ -38,8 +38,7 @@
 </div>
 
 
-<!-- Uncomment and complete if we need to use custom Javascript
 {% block scripts %}
 {{super()}}
+<script src="{{url_for('.static', filename='javascripts/uploadcontent.js')}}"></script>
 {% endblock %}
--->

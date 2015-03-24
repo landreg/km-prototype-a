@@ -1,8 +1,8 @@
 from flask import render_template, flash, redirect, request, session, make_response
 from application import app
 from flask import render_template
-from forms import searchForm
-from ElastSearch import NewSearchDataOnContent, NewSearchDataOnId, NewSearchDataOnRelated
+from forms import searchForm, uploadContentForm, uploadResultsForm
+from ElastSearch import NewSearchDataOnContent, NewSearchDataOnId, NewSearchDataOnRelated, UploadContent
 
 class article(object):
     def __init__(self, title=None, itemid=None, scope=None):
@@ -176,3 +176,26 @@ def displayLrPage(itemid):
 
 
     return render_template('lr-page.html', form=form, searchElements=pr_body, related_list = rl_article_list, external_list = rl_external_list)
+
+@app.route('/uploadcontent', methods=['GET','POST'])
+def uploadPage():
+
+    form = uploadContentForm()
+    if form.validate_on_submit():
+        files = request.files.getlist("files[]")
+        filenames = []
+        for file in files:
+            filename = str(file.filename)
+            res = UploadContent(file)
+            if str(res)[0] != "2":
+                filenames.append("File " + filename+" failed to upload. Status code is " + str(res))
+        return render_template('/uploadresults.html', filenames=filenames)
+    return render_template('uploadcontent.html',form=form)
+
+@app.route('/uploadresults', methods=['GET','POST'])
+def uploadResultsPage():
+
+    form = uploadResultsForm()
+    if form.validate_on_submit():
+        return redirect('/uploadcontent')
+    return render_template('uploadresults.html', form=form, filenames=filenames)
