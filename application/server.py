@@ -14,7 +14,15 @@ class ext_link(object):
     def __init__(self, title=None, link=None):
         self.title = title
         self.link = link
-
+        
+class facet(object):
+    def __init__(self, name):
+        self.name = name
+        self.foci_list = []
+        
+    def add_foci(self, name, foci):
+        self.foci_list.append(foci)
+        
 
 #Store current item ID - defualt to first item
 storeditemid = 1
@@ -88,7 +96,8 @@ def index():
 def searchUpdate():
 
     form = searchForm()
-
+    facet_list = []
+    
     print request.args.get('search')
     print request.args.get('searchtype')
     print request.args.get('pagesize')
@@ -121,10 +130,21 @@ def searchUpdate():
             articleId = hit["_source"]["id"]
             searchResults += "<h3><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h3>"
             searchResults += "<p>" + hit["_source"]["scope"] + "</p>"
-
-            for item in hit["_source"]["facets"]:
-                if "id" in item:
-                    rl_id = item['id']
+            
+            #loop through the list of facets
+            for items in hit["_source"]["facets"]:
+                if "name" in items:
+                    #store the name of the facet
+                    facet_name = items['name']
+                    
+                    #check if this facet already exists
+                    index = facet_exists()
+                    if index == 
+                        
+                    facet_list.append(facet(facet_name)) 
+                    for foci in items['foci']:
+                         
+                    
         if searchResults == "":
             searchResults = noResults
     else:
