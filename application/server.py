@@ -15,7 +15,6 @@ class ext_link(object):
         self.title = title
         self.link = link
 
-#rl_article_list = []
 
 #Store current item ID - defualt to first item
 storeditemid = 1
@@ -101,9 +100,7 @@ def searchUpdate():
         searchType = 'date'
         pageNo = 1
         pageSize = 5
-
     else:
-
         searchType = request.args.get('searchtype')
         pageSize = int(request.args.get('pagesize'))
         pageNo = int(request.args.get('pageno'))
@@ -112,7 +109,6 @@ def searchUpdate():
     searchResults = ""
 
     if request.args.get('search') != "":
-
         #pass in 'score' 'date' 'popularity'
         res = NewSearchDataOnContent(search, searchType, pageSize, pageNo)
         hit = res['hits']['hits']
@@ -122,17 +118,20 @@ def searchUpdate():
         print "Total number of hits " + str(res['hits']['total'])
 
         for hit in res['hits']['hits']:
-
             articleId = hit["_source"]["id"]
             searchResults += "<h3><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h3>"
             searchResults += "<p>" + hit["_source"]["scope"] + "</p>"
 
             print hit["_source"]["scope"]
 
+
+            for item in hit["_source"]["facets"]:
+                if "id" in item:
+                    rl_id = item['id']
+
         if searchResults == "":
             searchResults = noResults
     else:
-
         return render_template('index.html', form=form)
 
     return render_template('searchResult.html', form=form, searchElements=searchResults, search=search, searchtype=searchType, totalnohits=totalNoHits, pagesize=pageSize, pageno=pageNo)
@@ -148,7 +147,6 @@ def displayLrPage(itemid):
     rl_external_list = []
 
     storeditemid = itemid
-
 
     prime_res = NewSearchDataOnId(str(itemid))
     #this line will only get articles that have the primary article in THEIR related list only
@@ -171,9 +169,6 @@ def displayLrPage(itemid):
         for item in hit['_source']['extlinks']:
             if "url" in item:
                 rl_external_list.append(ext_link(item["name"], item["url"]))
-
-
-
 
     return render_template('lr-page.html', form=form, searchElements=pr_body, related_list = rl_article_list, external_list = rl_external_list)
 
