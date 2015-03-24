@@ -1,4 +1,4 @@
-from flask import render_template, flash, redirect
+from flask import render_template, flash, redirect, request, session, make_response
 from application import app
 from flask import render_template
 from forms import searchForm
@@ -9,16 +9,16 @@ class article(object):
         self.title = title
         self.itemid = itemid
         self.scope = scope
-        
+
 class ext_link(object):
     def __init__(self, title=None, link=None):
         self.title = title
         self.link = link
 
-#rl_article_list = []
 
 #Store current item ID - defualt to first item
 storeditemid = 1
+
 
 #########################################################################################################################
 ### Redundant code used from static code demonstration and multiple themes
@@ -80,22 +80,43 @@ def displayLrPageStd(itemid):
 @app.route('/search')
 def index():
     form = searchForm()
+
     return render_template('index.html', form=form)
 
-@app.route('/search-result', methods=['POST'])
-def searchResult():
+
+@app.route('/search-result', methods=['GET'])
+def searchUpdate():
+
     form = searchForm()
+
+    print request.args.get('search')
+    print request.args.get('searchtype')
+    print request.args.get('pagesize')
+    print request.args.get('pageno')
+
+    search = request.args.get('search')
+
+    if request.args.get('searchtype') == None:
+        searchType = 'date'
+        pageNo = 1
+        pageSize = 5
+    else:
+        searchType = request.args.get('searchtype')
+        pageSize = int(request.args.get('pagesize'))
+        pageNo = int(request.args.get('pageno'))
 
     noResults = "<h3>Your search did not match any articles</h3><p><a id=\"no_article\" href=\"/search\">Click here to search again</a></p>"
     searchResults = ""
 
-    if form.searchString.data != "":
-        
-        #Parameters: data, sort_type, page_size, page_number
-        #pass in 'score' 'date' 'popularity' for sort_type
-        res = NewSearchDataOnContent(form.searchString.data, 'score', 5, 1)
-        #hit = res['hits']['hits'][2]
-        #print res['hits']['total']
+    if request.args.get('search') != "":
+        #pass in 'score' 'date' 'popularity'
+        res = NewSearchDataOnContent(search, searchType, pageSize, pageNo)
+        hit = res['hits']['hits']
+
+        totalNoHits = int(res['hits']['total'])
+
+        print "Total number of hits " + str(res['hits']['total'])
+
         for hit in res['hits']['hits']:
             articleId = hit["_source"]["id"]
             searchResults += "<h3><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h3>"
@@ -107,15 +128,14 @@ def searchResult():
         if searchResults == "":
             searchResults = noResults
     else:
-
         return render_template('index.html', form=form)
 
-    return render_template('searchResult.html',searchElements=searchResults)
-
-
+    return render_template('searchResult.html', form=form, searchElements=searchResults, search=search, searchtype=searchType, totalnohits=totalNoHits, pagesize=pageSize, pageno=pageNo)
 
 @app.route('/lr-page/<itemid>', methods=['GET'])
 def displayLrPage(itemid):
+
+    form = searchForm()
 
     global storeditemid
 
@@ -127,8 +147,8 @@ def displayLrPage(itemid):
     prime_res = NewSearchDataOnId(str(itemid))
     #this line will only get articles that have the primary article in THEIR related list only
     #related_res = NewSearchDataOnRelated(str(itemid))
-    
-    #business requirement is that only articles that their id in the PRIMARY article's related list  
+
+    #business requirement is that only articles that their id in the PRIMARY article's related list
     for hit in prime_res['hits']['hits']:
         pr_body = (hit["_source"]["content"])
         pr_title = (hit["_source"]["title"])
@@ -140,10 +160,10 @@ def displayLrPage(itemid):
                 #create an object list to store related article information
                 for hit in related_res['hits']['hits']:
                     rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["id"], hit["_source"]["scope"]))
-            
+
         #create an object list to store external related links
         for item in hit['_source']['extlinks']:
             if "url" in item:
                 rl_external_list.append(ext_link(item["name"], item["url"]))
-    
-    return render_template('lr-page.html',searchElements=pr_body, related_list = rl_article_list, external_list = rl_external_list)
+
+    return render_template('lr-page.html', form=form, searchElements=pr_body, related_list = rl_article_list, external_list = rl_external_list)
