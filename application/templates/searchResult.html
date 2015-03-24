@@ -1,9 +1,90 @@
-{% extends "lr-base.html" %}
+{% extends "lr-base-search.html" %}
 
 {% block content %}
 
+{% set prev = pageno - 1 %}
+{% set next = pageno + 1 %}
+{% set remainder = totalnohits % pagesize %}
+{% set totalnopages = totalnohits//pagesize %}
+{% if remainder != 0 %}
+  {% set totalnopages = totalnopages + 1%}
+{% endif %}
+
 <div class="row">
-  <div class="col-md-9">{{searchElements|safe}}</div>
+  <div class="col-md-9">
+    <div class="panel panel-default">
+      <div class="panel-body">
+
+
+
+         <div class="btn-group" aria-label="Justified button group" role="group">
+           <a class="btn btn-default disabled" role="button" href="">Sort by</a>
+
+          {% if searchtype == 'popularity' %}
+            <a id="helpful" class="btn btn-success" role="button" href="/search-result?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
+            <a id="relevant" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
+            <a id="latest" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
+          {% elif searchtype == 'score' %}
+
+            <a id="helpful" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
+            <a class="btn btn-success" role="button" href="/search-result?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
+            <a class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
+
+          {% elif searchtype == 'date' %}
+            <a id="helpful" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
+            <a id="relevant" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
+            <a id="latest" class="btn btn-success" role="button" href="/search-result?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
+          {% endif %}
+
+        </div>
+
+
+
+        <div class="btn-group pull-right" aria-label="Justified button group" role="group">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+              {{pagesize}} results per page
+              <span class="caret"></span>
+            </button>
+              <ul class="dropdown-menu" role="menu">
+                <li><a id="pagesizeid1" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize=2&pageno=1">2</a></li>
+                <li><a id="pagesizeid2" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize=5&pageno=1">5</a></li>
+                <li><a id="pagesizeid3" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize=10&pageno=1">10</a></li>
+              </ul>
+           </div>
+
+          {% if pageno == 1 %}
+            <a id="prev" class="btn btn-default disabled" role="button" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{prev|e}}">prev</a>
+          {% else %}
+            <a id="prev" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{prev|e}}">prev</a>
+          {% endif %}
+
+          {% if pageno >= totalnohits/pagesize %}
+            <a id="next" class="btn btn-default disabled" role="button" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{next|e}}">next</a>
+          {% else %}
+            <a id="next" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{next|e}}">next</a>
+          {% endif %}
+
+        </div>
+
+
+
+    </div>
+    </div>
+    <div class="row>">
+      <div class="col-md-6">
+        <p class="text-left">Search matches {{totalnohits}} results</p>
+      </div>
+      <div class="col-md-6">
+        <p class="text-left"> Page {{pageno}} of {{totalnopages}} </p>
+      </div>
+    </div>
+
+    {{searchElements|safe}}
+
+  </div>
+
+
 <!--  <div class="col-md-3"></div> -->
   <div class="col-md-3"> <!-- Rightmost column content -->
     <div class="panel panel-default">
@@ -18,5 +99,7 @@
     </div>
   </div> <!-- End Rightmost column content -->
 </div>
+
+
 
 {% endblock %}
