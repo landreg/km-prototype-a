@@ -1,0 +1,57 @@
+<!-- extend from base layout -->
+{% extends "lr-base.html" %}
+
+{% block content %}
+
+  <!-- Set vertical position
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <!--  -->
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <h3>Results of your content upload</h3>
+      <div class="help-block">The results of your upload request are shown below.</div>
+      <form class="form" action="" method="post" name="results">
+        <button class="btn btn-default pull-right" type="submit">OK</button>
+        <div class="row"><div class="col-md-12"><p> </p></div></div>
+        <div class="row"><div class="col-md-12"><p> </p></div></div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Messages</h3>
+          </div>
+          <div class="panel-body">
+            {% if filenames %}
+              {% for file in filenames %}
+              <p>{{ file }}</p>
+              {% endfor %}
+            {% else %}
+              <p>All files uploaded successfully</p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="row"><div class="col-md-12"><p> </p></div></div>
+        <div class="row"><div class="col-md-12"><p> </p></div></div>
+        <div class="row"><div class="col-md-12"><p> </p></div></div>
+  <!--      <button class="btn btn-default pull-right" type="submit">OK</button> -->
+      </form>
+    <div class="col-md-3"></div>
+ </div>
+ </div>
+
+
+{% endblock %}

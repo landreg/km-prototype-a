@@ -6,9 +6,10 @@
 {% set next = pageno + 1 %}
 {% set remainder = totalnohits % pagesize %}
 {% set totalnopages = totalnohits//pagesize %}
-{% if remainder != 0 %}
+{% if ((remainder != 0) or (totalnopages == 0)) %}
   {% set totalnopages = totalnopages + 1%}
 {% endif %}
+
 
 <div class="row">
   <div class="col-md-9">
