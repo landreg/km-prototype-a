@@ -1,14 +1,9 @@
 from flask import render_template, flash, redirect, request, session, make_response
 from application import app
 from flask import render_template
-<<<<<<< HEAD
-from forms import searchForm
-from ElastSearch import NewSearchDataOnContent, NewSearchDataOnId, NewSearchDataOnRelated
 from sets import Set
-=======
 from forms import searchForm, uploadContentForm, uploadResultsForm
 from ElastSearch import NewSearchDataOnContent, NewSearchDataOnId, NewSearchDataOnRelated, UploadContent
->>>>>>> master
 
 class article(object):
     def __init__(self, title=None, itemid=None, scope=None):
