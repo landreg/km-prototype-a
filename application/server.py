@@ -1,6 +1,7 @@
 from flask import render_template, flash, redirect, request, session, make_response
 from application import app
 from flask import render_template
+from sets import Set
 from forms import searchForm, uploadContentForm, uploadResultsForm
 from ElastSearch import NewSearchDataOnContent, NewSearchDataOnId, NewSearchDataOnRelated, UploadContent
 
@@ -14,11 +15,21 @@ class ext_link(object):
     def __init__(self, title=None, link=None):
         self.title = title
         self.link = link
-
-
+        
+class facet(object):
+    def __init__(self, name):
+        self.name = name
+        self.foci_list = []
+        
+    def add_foci(self, foci):
+        self.foci_list.append(foci)
+        
+    def remove_duplicates(self):
+        old_list = self.foci_list
+        self.foci_list = list(Set(old_list))
+        
 #Store current item ID - defualt to first item
 storeditemid = 1
-
 
 #########################################################################################################################
 ### Redundant code used from static code demonstration and multiple themes
@@ -88,7 +99,8 @@ def index():
 def searchUpdate():
 
     form = searchForm()
-
+    facet_list = []
+    
     print request.args.get('search')
     print request.args.get('searchtype')
     print request.args.get('pagesize')
@@ -109,7 +121,7 @@ def searchUpdate():
     searchResults = ""
 
     if request.args.get('search') != "":
-        #pass in 'score' 'date' 'popularity'
+        #for searchType pass in 'score' 'date' 'popularity'
         res = NewSearchDataOnContent(search, searchType, pageSize, pageNo)
         hit = res['hits']['hits']
 
@@ -121,20 +133,51 @@ def searchUpdate():
             articleId = hit["_source"]["id"]
             searchResults += "<h3><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h3>"
             searchResults += "<p>" + hit["_source"]["scope"] + "</p>"
-
-            print hit["_source"]["scope"]
-
-
-            for item in hit["_source"]["facets"]:
-                if "id" in item:
-                    rl_id = item['id']
-
+            
+            #loop through the list of facets
+            for items in hit["_source"]["facets"]:
+                if "name" in items:
+                    #store the name of the facet
+                    facet_name = items['name']
+                    
+                    #check if this facet already exists
+                    index = -1
+                    for i, v in enumerate(facet_list):
+                        #return the index of the element if it does
+                        if v.name == facet_name:
+                            index = i
+                            break
+                        #return -1 if it doesn't
+                        else:
+                            index = -1
+                    
+                    if index == -1:
+                        #add a new facet item
+                        data = facet(facet_name)
+                        for foci in items['foci']:
+                            #add the foci
+                            data.add_foci(foci)
+                        #add the facet item to the list
+                        facet_list.append(data)
+                    else:
+                        #get an existing facet item
+                        data = facet_list.pop(index)
+                        for foci in items['foci']:
+                            #add foci to that item
+                            data.add_foci(foci)
+                        #add the facet item back to the list    
+                        facet_list.append(data)
+                        
+        #finally remove any foci duplicates for each facet item
+        for data in facet_list:
+            data.remove_duplicates()
+        
         if searchResults == "":
             searchResults = noResults
     else:
         return render_template('index.html', form=form)
 
-    return render_template('searchResult.html', form=form, searchElements=searchResults, search=search, searchtype=searchType, totalnohits=totalNoHits, pagesize=pageSize, pageno=pageNo)
+    return render_template('searchResult.html', form=form, searchElements=searchResults, search=search, searchtype=searchType, totalnohits=totalNoHits, pagesize=pageSize, pageno=pageNo, facetElements=facet_list)
 
 @app.route('/lr-page/<itemid>', methods=['GET'])
 def displayLrPage(itemid):
