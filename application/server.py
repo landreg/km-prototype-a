@@ -93,15 +93,17 @@ def searchResult():
         
         #Parameters: data, sort_type, page_size, page_number
         #pass in 'score' 'date' 'popularity' for sort_type
-        res = NewSearchDataOnContent(form.searchString.data, 'date', 2, 1)
-        hit = res['hits']['hits']
+        res = NewSearchDataOnContent(form.searchString.data, 'score', 5, 1)
+        #hit = res['hits']['hits'][2]
         #print res['hits']['total']
         for hit in res['hits']['hits']:
-            #print hit
             articleId = hit["_source"]["id"]
             searchResults += "<h3><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h3>"
             searchResults += "<p>" + hit["_source"]["scope"] + "</p>"
 
+            for item in hit["_source"]["facets"]:
+                if "id" in item:
+                    rl_id = item['id']
         if searchResults == "":
             searchResults = noResults
     else:
@@ -122,7 +124,6 @@ def displayLrPage(itemid):
 
     storeditemid = itemid
 
-    
     prime_res = NewSearchDataOnId(str(itemid))
     #this line will only get articles that have the primary article in THEIR related list only
     #related_res = NewSearchDataOnRelated(str(itemid))
@@ -145,6 +146,4 @@ def displayLrPage(itemid):
             if "url" in item:
                 rl_external_list.append(ext_link(item["name"], item["url"]))
     
-
-
     return render_template('lr-page.html',searchElements=pr_body, related_list = rl_article_list, external_list = rl_external_list)
