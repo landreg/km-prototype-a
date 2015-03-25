@@ -45,20 +45,20 @@ def NewSearchDataOnId(data):
 #sort_type must be either score popularity date
 def NewSearchDataOnContent(data, sort_type, page_size, page_number):
     if page_number == 1:
-        page_from = 1
+        page_from = 0
     else:
-        page_from = ((page_number - 1) * page_size) + 1
-    print page_from
-    
+        page_from = ((page_number - 1) * page_size)
+    #print page_from
+
     if sort_type == 'score':
         payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":["_score"] })
     elif sort_type == 'popularity':
         payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":[{"popularity": {"order": "asc"}}] })
     elif sort_type == 'date':
-        payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":[{"lastupdate": {"order": "asc"}}] })    
+        payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":[{"lastupdate": {"order": "asc"}}] })
     else:
-        payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":["_score"] })    
-    
+        payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":["_score"] })
+
     headers = {'content-type': 'application/json'}
 
     res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
@@ -162,6 +162,15 @@ def SearchDataOnBody(data):
         flash(r.text)
         flash(r.status_code)"""
 
+def UploadContent(files):
+    try:
+        content = json.load(files)
+    except ValueError:
+        return 400
+    id_value = content["id"]
+    headers = {'content-type': 'application/json'}
+    r = requests.post(REMOTE_URLcred+'/'+id_value, data=json.dumps(content), headers=headers)
+    return r.status_code
 
 
 #SearchDataOnTitle('charge')
@@ -175,14 +184,16 @@ def SearchDataOnBody(data):
 
 #print (res)
 
-'''res = NewSearchDataOnContent('and', 'score', 2, 2)
+'''res = NewSearchDataOnContent('and', 'score', 10, 1)
 #print res
 hit = res['hits']['hits']
-
+#print hit
 for hit in res['hits']['hits']:
-
-    articleId = hit["_source"]["id"]
-    print articleId'''
+    #print hit
+    for ids in hit['_source']['kmlinks']:
+        print ids
+        articleId = ids['id']
+        print articleId'''
 
 
 #{"took":3,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":1,"max_score":1.0,"hits":[{"_index":"knowledge","_type":"information","_id":"1","_score":1.0,"_source":{"itemid": "1", "body": "I want a mortgage", "tag": "mortgage, charge, want", "subtitle": "mortgage", "title": "charge"}}]}}
