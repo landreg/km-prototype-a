@@ -116,16 +116,17 @@ def searchUpdate():
     if request.args.get('searchtype') == None:
         searchType = 'score'
         pageNo = 1
-        pageSize = int(cookiePageSize)
+
+        if cookiePageSize == None:
+            pageSize = minPageSize
+        else:
+            pageSize = int(cookiePageSize)
     else:
         searchType = request.args.get('searchtype')
         pageSize = int(request.args.get('pagesize'))
         pageNo = int(request.args.get('pageno'))
 
-    if pageSize == None:
-        pageSize = minPageSize
-
-
+    
     noResults = "<h3>Your search did not match any articles</h3><p><a id=\"no_article\" href=\"/search\">Click here to search again</a></p>"
     searchResults = ""
 
