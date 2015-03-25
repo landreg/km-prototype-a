@@ -317,3 +317,54 @@ end
 Then(/^a Related External link can be selected$/) do
   assert page.has_content?('Agreement of occupier to postponement of rights')
 end
+
+#Sprint 4
+#Refactored for new code structure)
+#US10c/DS10c.A Related Article link is displayed on a Knowledge Article page
+Given(/^a Knowledge Article page is displayed$/) do
+  access_search_page
+  fill_in('search', :with=> 'charge')
+  click_button('submit')
+  assert page.has_content?('Charge combined with transfers and leases')
+  click_link('Charge combined with transfers and leases')
+end
+
+When(/^the page displays a Related Article$/) do
+  assert page.has_content?('Related Articles')
+end
+
+Then(/^the Related Article link is displayed$/) do
+  assert page.has_content?('Agreement of occupier to postponement of rights')
+end
+
+#US10d/DS10d.A Related Article link is displayed on a Knowledge Article page
+Given(/^the user is on Knowledge Article page$/) do
+  access_search_page
+
+  submit
+  click_link('Charge combined with transfers and leases')
+end
+
+When(/^External Links is displayed on the page$/) do
+  assert page.has_content?('External Links')
+end
+
+#For future use
+#Then(/^an External Link can be selected$/) do
+#  assert page.has_content?('foo')
+#end
+
+#US11a/DS11a.Related Articles displays on Knowledge Article page
+Given(/^a Related Articles panel is displayed on a Knowledge Article page$/) do
+  get_to_related_links_on_articles_page
+  assert page.has_content?('Related Articles')
+end
+
+When(/^the Related Articles link is selected$/) do
+  assert page.has_content?('Agreement of occupier to postponement of rights')
+  click_link('Agreement of occupier to postponement of rights')
+end
+
+Then(/^the article structured data is returned$/) do
+  assert page.has_content?('Charges containing a legal and equitable charge over the same property')
+end
