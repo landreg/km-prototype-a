@@ -43,7 +43,7 @@ def NewSearchDataOnId(data):
     return res
 
 #sort_type must be either score popularity date
-def NewSearchDataOnContent(data, sort_type, page_size, page_number):
+def NewSearchDataOnContent(data, sort_type, page_size, page_number, fields, order):
     if page_number == 1:
         page_from = 0
     else:
@@ -51,13 +51,22 @@ def NewSearchDataOnContent(data, sort_type, page_size, page_number):
     #print page_from
 
     if sort_type == 'score':
-        payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":["_score"] })
+        sort = '_score'
     elif sort_type == 'popularity':
+        sort = 'popularity'
+    elif sort_type == 'date':
+        sort = 'lastupdate'
+    else:
+        sort = '_score'
+        
+    payload = json.dumps({"from":page_from, "size":page_size, "query": {"multi_match" : {"query": data, "fields": fields}},"sort": [{sort:{"order": order}}] })
+    
+    '''elif sort_type == 'popularity':
         payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":[{"popularity": {"order": "asc"}}] })
     elif sort_type == 'date':
         payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":[{"lastupdate": {"order": "asc"}}] })
     else:
-        payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":["_score"] })
+        payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":["_score"] })'''
 
     headers = {'content-type': 'application/json'}
 

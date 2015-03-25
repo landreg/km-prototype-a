@@ -109,7 +109,7 @@ def searchUpdate():
     search = request.args.get('search')
 
     if request.args.get('searchtype') == None:
-        searchType = 'date'
+        searchType = 'score'
         pageNo = 1
         pageSize = 5
     else:
@@ -121,8 +121,13 @@ def searchUpdate():
     searchResults = ""
 
     if request.args.get('search') != "":
+        
+        fields = ["scope", "keywords^5", "title"] #what fields are we searching on
+        
+        order = "desc" #asc or desc
+        
         #for searchType pass in 'score' 'date' 'popularity'
-        res = NewSearchDataOnContent(search, searchType, pageSize, pageNo)
+        res = NewSearchDataOnContent(search, searchType, pageSize, pageNo, fields, order)
         hit = res['hits']['hits']
 
         totalNoHits = int(res['hits']['total'])
