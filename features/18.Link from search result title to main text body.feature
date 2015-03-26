@@ -2,6 +2,6 @@
 Feature:18.Link from search result title to main text body
 
 Scenario:Link from search result title to main text body
-Given I have navigated to the search results page
-When I select the title on the results page
+Given the search results page is displayed
+When the scope on the results page is selected
 Then the main bodytext is displayed
