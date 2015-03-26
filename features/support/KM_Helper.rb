@@ -30,3 +30,8 @@ def get_to_related_links_on_articles_page
   assert page.has_content?('Charge combined with transfers and leases')
   click_link('Charge combined with transfers and leases')
 end
+
+def submit_charge
+  fill_in('search', :with=> 'charge')
+  click_button('submit')
+end
