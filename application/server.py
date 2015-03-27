@@ -132,12 +132,12 @@ def searchUpdate():
     minPageSize = 5
     form = searchForm()
     facet_list = []
+    refine_by_facet_list = []
 
-    # Matt test for refine search
+    # Refine By user selections
     if request.args.getlist('fociselected'):
-        print refineResults(request.args.getlist('fociselected'))
-    else:
-        print "No foci selected"
+        refine_by_facet_list = refineResults(request.args.getlist('fociselected'))
+
     #Get store page size from cookie
     cookiePageSize = request.cookies.get('cookie-pagesize')
 
