@@ -52,7 +52,7 @@
 
 
          <div class="btn-group" aria-label="Justified button group" role="group">
-           <a class="btn btn-default disabled" role="button" href="">Sort by</a>
+           <a id="sortby" class="btn btn-default disabled" role="button" href="">Sort by</a>
 
           {% if searchtype == 'popularity' %}
             <a id="helpful" class="btn btn-success" role="button" href="/search-result?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
@@ -61,8 +61,8 @@
           {% elif searchtype == 'score' %}
 
             <a id="helpful" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
-            <a class="btn btn-success" role="button" href="/search-result?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
-            <a class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
+            <a id="relevant" class="btn btn-success" role="button" href="/search-result?search={{search|e}}&searchtype=score&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Relevant</a>
+            <a id="latest" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=date&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Latest</a>
 
           {% elif searchtype == 'date' %}
             <a id="helpful" class="btn btn-default" role="button" href="/search-result?search={{search|e}}&searchtype=popularity&pagesize={{pagesize|e}}&pageno={{pageno|e}}">Helpful</a>
@@ -76,7 +76,7 @@
 
         <div class="btn-group pull-right" aria-label="Justified button group" role="group">
           <div class="btn-group" role="group">
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            <button id="pagesizedropdown" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
               {{pagesize}} results per page
               <span class="caret"></span>
             </button>
