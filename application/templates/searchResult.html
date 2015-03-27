@@ -24,7 +24,7 @@
         </div>
         <div class="panel-body refine-panel">
           {% if facetElements %}
-          <p class="text-left">Select criteria below to refine the results of your search and click 'Submit' when you're done.</p>
+          <div class="help-block">Select criteria below to refine the results of your search and click 'Submit' when you're done.</div>
           <button type="submit" class="btn btn-default btn-xs">Submit</button>
           {% for facet in facetElements %}
           <h4>{{facet.name}}</h4>
