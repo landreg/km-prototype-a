@@ -22,3 +22,16 @@ def submit
   fill_in('searchString', :with=> 'charge')
   click_button('submit')
 end
+
+def get_to_related_links_on_articles_page
+  access_search_page
+  fill_in('search', :with=> 'charge')
+  click_button('submit')
+  assert page.has_content?('Charge combined with transfers and leases')
+  click_link('Charge combined with transfers and leases')
+end
+
+def submit_charge
+  fill_in('search', :with=> 'charge')
+  click_button('submit')
+end
