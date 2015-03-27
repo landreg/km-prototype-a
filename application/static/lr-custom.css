@@ -61,3 +61,25 @@ background: white;
 cursor: inherit;
 display: block;
 }
+
+.onwards_aside a:hover {
+         position:right;
+         left:0;
+  }
+
+
+.onwards_aside a[tooltip]:hover:after {
+        content: attr(tooltip);
+        color: black;
+        background-color: #f7f7f7;
+        border:1px;
+        position: absolute;
+        right:0;
+        margin-right: 100%;
+        border-radius: 10px;
+        border: thin solid black;
+        padding: 5px 5px 5px 5px;
+        width:200%;
+        z-index=9999;
+
+}
