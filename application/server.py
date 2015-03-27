@@ -31,6 +31,37 @@ class facet(object):
 #Store current item ID - defualt to first item
 storeditemid = 1
 
+def refineResults(selectedfoci):
+    refined_list = []
+    for items in selectedfoci:
+        facet_name,foci_name = items.split(',')
+
+        #check if this facet already exists
+        index = -1
+        for i, v in enumerate(refined_list):
+            #return the index of the element if it does
+            if v.name == facet_name:
+                index = i
+                break
+            #return -1 if it doesn't
+            else:
+                index = -1
+
+        if index == -1:
+            #add a new facet item
+            data = facet(facet_name)
+            data.add_foci(foci_name)
+            #add the facet item to the list
+            refined_list.append(data)
+        else:
+            #get an existing facet item
+            data = refined_list.pop(index)
+            data.add_foci(foci_name)
+            #add the facet item back to the list
+            refined_list.append(data)
+
+    return refined_list
+
 #########################################################################################################################
 ### Redundant code used from static code demonstration and multiple themes
 #########################################################################################################################
@@ -101,6 +132,11 @@ def searchUpdate():
     minPageSize = 5
     form = searchForm()
     facet_list = []
+    refine_by_facet_list = []
+
+    # Refine By user selections
+    if request.args.getlist('fociselected'):
+        refine_by_facet_list = refineResults(request.args.getlist('fociselected'))
 
     #Get store page size from cookie
     cookiePageSize = request.cookies.get('cookie-pagesize')
@@ -126,7 +162,7 @@ def searchUpdate():
         pageSize = int(request.args.get('pagesize'))
         pageNo = int(request.args.get('pageno'))
 
-    
+
     noResults = "<h3>Your search did not match any articles</h3><p><a id=\"no_article\" href=\"/search\">Click here to search again</a></p>"
     searchResults = ""
 
