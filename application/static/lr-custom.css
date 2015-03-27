@@ -14,6 +14,12 @@ body {
   overflow-y: scroll;
 }
 
+.refine-panel {
+  min-height: 300px;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
 /*form input#searchString*/
 form input#search
 {
