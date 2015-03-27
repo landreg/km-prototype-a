@@ -317,3 +317,132 @@ end
 Then(/^a Related External link can be selected$/) do
   assert page.has_content?('Agreement of occupier to postponement of rights')
 end
+
+#Sprint 4
+#Refactored for new code structure)
+#US10c/DS10c.A Related Article link is displayed on a Knowledge Article page
+Given(/^a Knowledge Article page is displayed$/) do
+  access_search_page
+  fill_in('search', :with=> 'charge')
+  click_button('submit')
+  assert page.has_content?('Charge combined with transfers and leases')
+  click_link('Charge combined with transfers and leases')
+end
+
+When(/^the page displays a Related Article$/) do
+  assert page.has_content?('Related Articles')
+end
+
+Then(/^the Related Article link is displayed$/) do
+  assert page.has_content?('Agreement of occupier to postponement of rights')
+end
+
+#US10d/DS10d.A Related Article link is displayed on a Knowledge Article page
+Given(/^the user is on Knowledge Article page$/) do
+  access_search_page
+
+  submit
+  click_link('Charge combined with transfers and leases')
+end
+
+When(/^External Links is displayed on the page$/) do
+  assert page.has_content?('External Links')
+end
+
+#For future use ......
+#Then(/^an External Link can be selected$/) do
+#  assert page.has_content?('foo')
+#end
+
+#US11a/DS11a.Related Articles displays on Knowledge Article page
+Given(/^a Related Articles panel is displayed on a Knowledge Article page$/) do
+  get_to_related_links_on_articles_page
+  assert page.has_content?('Related Articles')
+end
+
+When(/^the Related Articles link is selected$/) do
+  assert page.has_content?('Agreement of occupier to postponement of rights')
+  click_link('Agreement of occupier to postponement of rights')
+end
+
+Then(/^the article structured data is returned$/) do
+  assert page.has_content?('Charges containing a legal and equitable charge over the same property')
+end
+
+#12a.Hover on Related Articles links on Knowledge Article page
+Given(/^I get to a Knowledge Article page$/) do
+  get_to_related_links_on_articles_page
+  assert page.has_content?('Related Articles')
+  click_link('Agreement of occupier to postponement of rights')
+end
+
+When(/^I hover over a Related Articles link in the panel$/) do
+  assert page.has_content?('Related Articles')
+  assert page.has_content?('elated_article_id_ChargesContainingLegalEquitableChargeSameProperty')
+  title = find(:xpath, './/*[@id="related_article_id_ChargeCombinedWithTransferLeases"]')['title']
+end
+
+Then(/^the data relating to the link is displayed$/) do
+  assert_match title, "related_article_id_ChargeCombinedWithTransferLeases"
+end
+
+#16a.Submit Search and display search result
+Given(/^I enter a search$/) do
+  access_search_page
+end
+
+When(/^I submit the search$/) do
+  submit_charge
+end
+
+Then(/^the search result is returned$/) do
+  assert page.has_content?('Further charges')
+end
+
+#US17a/DS17a.Display sub title to search result
+Given(/^a search is submitted$/) do
+  access_search_page
+  submit_charge
+end
+
+When(/^the search result is displayed$/) do
+  assert page.has_content?("Further charges")
+end
+
+Then(/^the scope is displayed$/) do
+  assert page.has_content?("Substituted charges")
+end
+
+#US18a/DS18a.Display sub title to search result
+Given(/^I am on the search results page$/) do
+  access_search_page
+  submit_charge
+end
+
+When(/^the title on the results page is selected$/) do
+  click_link('Second charges')
+end
+
+Then(/^the main bodytext is returned$/) do
+  assert page.has_content?('Second charges')
+  content ("A second charge is registered in the same way as a first charge, you must consider any existing chargee restrictions in the register and if consent is required. ")
+end
+
+#US19/DS19.19.Sort Related Article results
+Given(/^a succesful search has beeen carried out$/) do
+  access_search_page
+  submit_charge
+end
+
+When(/^the results are displayed on the scope page$/) do
+  assert page.has_content?("Helpful"), "********** No Matching Text Found **********"
+end
+
+Then(/^the results can be sorted by Helpful, Relevant & Latest$/) do
+  click_link('helpful')
+  assert page.has_content?("Checking the Charge")
+  click_link('latest')
+  assert page.has_content?("Charges - despatch and retention of documents")
+  click_link('relevant')
+  assert page.has_content?("Further charges")
+end
