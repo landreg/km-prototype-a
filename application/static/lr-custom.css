@@ -15,8 +15,8 @@ body {
 }
 
 .refine-panel {
-  min-height: 300px;
-  max-height: 300px;
+  min-height: 400px;
+  max-height: 400px;
   overflow-y: scroll;
 }
 
