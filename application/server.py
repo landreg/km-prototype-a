@@ -122,7 +122,7 @@ def displayLrPageStd(itemid):
 @app.route('/search')
 def index():
     form = searchForm()
-
+    session.pop('refined_search_list',None)
     return render_template('index.html', form=form)
 
 
@@ -136,7 +136,13 @@ def searchUpdate():
 
     # Refine By user selections
     if request.args.getlist('fociselected'):
-        refine_by_facet_list = refineResults(request.args.getlist('fociselected'))
+        session['refined_search_list'] = request.args.getlist('fociselected')
+    try:
+        refine_by_facet_list = refineResults(session['refined_search_list'])
+    except KeyError:
+        pass
+
+    print refine_by_facet_list
 
     #Get store page size from cookie
     cookiePageSize = request.cookies.get('cookie-pagesize')
