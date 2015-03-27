@@ -5,6 +5,7 @@ import array
 import requests
 
 
+
 #URL = 'http://192.168.50.7:9200/knowledgetest/information'
 #ES_HOST = {"host" : "http://192.168.50.7", "port" : 9200}
 #INDEX_NAME = 'knowledge'
@@ -12,9 +13,12 @@ import requests
 
 #REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/information' #for testing
 
-REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
+#REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
 
 REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
+
+#alex's test database
+REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/new_kmowledge/information'
 
 #REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgetest/information'
 
@@ -75,6 +79,246 @@ def NewSearchDataOnContent(data, sort_type, page_size, page_number, fields, orde
 
     return res
 
+def NewSearchwithFoci(data, sort_type, page_size, page_number, fields, order, facets):
+    if page_number == 1:
+        page_from = str(0)
+    else:
+        page_from = str((page_number - 1) * page_size)
+    #print page_from
+    page_size = str(page_size)
+    if sort_type == 'score':
+        sort = '_score'
+    elif sort_type == 'popularity':
+        sort = 'popularity'
+    elif sort_type == 'date':
+        sort = 'lastupdate'
+    else:
+        sort = '_score'
+
+        
+    data1 = '{"nested": {"path": "facets", "query": {"bool": {"must": [ {"match": {"facets.name": '
+    
+    #facet_data.name
+    
+    data2 = '}}, {"match": {'
+    
+    data3 = '"facets.focis": '
+    
+    data4 = ', '
+    #more_foci_data
+    data5 = '}}'
+    
+    data6 = ']}}}}'
+    
+    num_facets = 0
+    p1 = ''
+    for facet in facets:
+        #print facet.name
+        num_facets = num_facets + 1
+        p1 = p1 + data1 +'"'+ facet.name +'"'+ data2
+        num_foci = 0
+        for foci in facet.foci_list:
+            num_foci = num_foci + 1
+            if len(facet.foci_list) > num_foci:
+                #print len(facet.foci_list), num_foci
+                p1 = p1 + data3 +'"'+ foci +'"'+ data4
+                #print p1
+            else:
+                #print len(facet.foci_list), num_foci
+                p1 = p1 + data3 +'"'+ foci +'"'+ data5
+                #print p1
+        if len(facets) > num_facets:
+            p1 = p1 + data6 + data4
+        else:
+            p1 = p1 + data6
+    print 'print p1'+p1        
+    p2 = '{"from":"'+page_from+'", "size":"'+page_size+'", "query": {"bool": {"must": [{"multi_match" : {"query":"'+ data+'", "fields": ['
+    num_fields = 0
+    for field in fields:
+        num_fields = num_fields + 1
+        if len(fields) > num_fields:
+            p2 = p2 +'"'+ field +'"'+ data4
+        else:
+            p2 = p2 +'"'+ field +'"]'
+        
+    p2= p2 + '}}, '+p1+']}},"sort": [{"'+sort+'":{"order": "'+order+'"}}] }'
+   
+    print 'print p2'+p2
+    p2.replace('\\"',"\"")
+    print 'print p2'+p2
+    payload = json.dumps(p2)
+    #p3 = json.dumps(json.dumps(p2))
+    #p4 = json.loads(json.loads(p3))
+    #print p3
+    #print p4
+    payload.replace('\\"',"\"")
+    #payload = json.dumps(p4)
+            
+    #payload = json.dumps({"from":page_from, "size":page_size, "query": {"bool": {"must": [{"multi_match" : {"query": data, "fields": fields}}, p3]}},"sort": [{sort:{"order": order}}] })
+    print 'PAYLOAD'+payload
+    headers = {'content-type': 'application/json'}
+
+    res = requests.get(REMOTE_URLcred+'/_search', data=p2, headers=headers)
+    res = json.loads(res.text)
+    print res
+    return res
+    
+
+''' 
+works:
+curl -X GET https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/new_kmowledge/information/_search -d '
+{
+  "query": {
+    "bool": {
+      "must": [
+      { "multi_match" : {
+        "query": "lion", "fields":["scope", "title", "keywords^5"]}},
+        {
+          "nested": {
+            "path": "facets",
+            "query": {
+              "bool": {
+                "must": [
+                  { "match": { "facets.name": "appn_type" }},
+                  { "match": {"facets.focis": "tp"}}
+                  ]
+
+                  }
+        }}},
+        {"nested": {
+            "path": "facets",
+            "query": {
+              "bool": {
+                "must": [
+                   { "match": { "facets.name": "colour" }},
+                  { "match": {"facets.focis": "red", "facets.focis": "green"}}
+                  ]
+                  }}}}
+        ]
+    }}}
+'
+doesn't work:
+curl -X GET https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/new_kmowledge/information/_search -d '
+{
+    "query": {
+        "bool": {
+            "must": [
+                {"multi_match" : {
+                    "query":"lion", "fields": ["scope", "title", "keywords^5"]}}, 
+                    {
+                        "nested": {
+                            "path": "facets", 
+                            "query": {
+                                "bool": {
+                                    "must": [ 
+                                        {"match": {"facet.name": "appn_type"}}, 
+                                        {"match": {"facets.focis": "tp"}}
+                                        ]
+                                        
+                                        }
+                        }}}, 
+                        {"nested": {
+                            "path": "facets", 
+                            "query": {
+                                "bool": {
+                                    "must": [ 
+                                        {"match": {"facet.name": "colour"}}, 
+                                        {"match": {"facets.focis": "red", "facets.focis": "green"}}
+                                        ]
+                                        }}}}
+                ]
+        }}}
+'
+
+curl -X GET https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/new_kmowledge/information/_search -d '
+{"from":"0", "size":"20", "query": {"bool": {"must": [{"multi_match" : {"query":"lion", "fields": ["scope", "title", "keywords^5"]}}, {"nested": {"path": "facets", "query": {"bool": {"must": [ {"match": {"facets.name": "appn_type"}}, {"match": {"facets.focis": "tp"}}]}}}}, {"nested": {"path": "facets", "query": {"bool": {"must": [ {"match": {"facets.name": "colour"}}, {"match": {"facets.focis": "red", "facets.focis": "green"}}]}}}}]}},"sort": [{"_score":{"order": "desc"}}] }'
+    
+curl -X GET https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/new_kmowledge/information/_search -d '    
+{"from":"0", "size":"20", 
+    "query": {
+        "bool": {
+            "must": [
+                {"multi_match" : {
+                    "query":"lion", "fields": ["scope", "title", "keywords^5"]}}, 
+                        {
+                            "nested": {
+                            "path": "facets", 
+                            "query": {
+                                "bool": {
+                                    "must": [
+                                    {"match": {"facet.name": "appn_type"}}, 
+                                    {"match": {"facets.focis": "tp", "facets.focis": "dlg"}}
+                                    ]
+                                    }
+                            }}}, 
+                        {
+                            "nested": {
+                                "path": "facets", 
+                                    "query": {
+                                        "bool": {
+                                            "must": [ 
+                                            {"match": {"facet.name": "colour"}}, 
+                                            {"match": {"facets.focis": "red", "facets.focis": "green"}}
+                                            ]
+                                            }}}}
+                            ]
+                            }},
+                    "sort": [{sort:{"order": "desc"}}] 
+                    }'
+                    
+curl -X GET https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/new_kmowledge/information/_search -d '                     
+{"query": {
+        "bool": {
+            "must": [
+                {"multi_match" : {
+                    "query":"lion", "fields": ["scope", "title", "keywords^5"]}}, 
+                        {
+                            "nested": {
+                            "path": "facets", 
+                            "query": {
+                                "bool": {
+                                    "must": [
+                                    {"match": {"facet.name": "appn_type"}}, 
+                                    {"match": {"facets.focis": "tp", "facets.focis": "dlg"}}
+                                    ]
+                                    }
+                            }}}, 
+                        {
+                            "nested": {
+                                "path": "facets", 
+                                    "query": {
+                                        "bool": {
+                                            "must": [ 
+                                            {"match": {"facet.name": "colour"}}, 
+                                            {"match": {"facets.focis": "red", "facets.focis": "green"}}
+                                            ]
+                                            }}}}
+                            ]
+                            }}}'
+
+, "facets.focis": "green"
+    
+curl -X GET https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/new_kmowledge/information/_search -d '
+{
+  "query": {
+    "bool": {
+      "must": [
+      { "multi_match" : {
+        "query": "lion", "fields":["scope", "title", "keywords^5"]}},
+        {
+          "nested": {
+            "path": "facets",
+            "query": {
+              "bool": {
+                "must": [
+                  { "match": { "facets.name": "appn_type" }},
+                  { "match": {"facets.focis": "tp"}}
+                  ]
+        }}}}
+        ]
+    }}}
+'
+'''
 def NewSearchDataOnItem(data):
     payload = json.dumps({"query": {"match" : {"items.item" : data}}})
     headers = {'content-type': 'application/json'}
@@ -204,6 +448,27 @@ for hit in res['hits']['hits']:
         articleId = ids['id']
         print articleId'''
 
+class Facet(object):
+    def __init__(self, name):
+        self.name = name
+        self.foci_list = []
+        
+    def add_foci(self, foci):
+        self.foci_list.append(foci)
+    
+fields = ["scope", "title", "keywords^5"]
+facets = []
+data = Facet('appn_type')
+data.add_foci('tp')
+facets.append(data)
+data = Facet('colour')
+data.add_foci('red')
+data.add_foci('green')
+facets.append(data)
+
+res = NewSearchwithFoci('lion', 'score', 20, 1, fields, 'desc', facets)
+    
+#print res
 
 #{"took":3,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":1,"max_score":1.0,"hits":[{"_index":"knowledge","_type":"information","_id":"1","_score":1.0,"_source":{"itemid": "1", "body": "I want a mortgage", "tag": "mortgage, charge, want", "subtitle": "mortgage", "title": "charge"}}]}}
 

@@ -16,7 +16,7 @@ class ext_link(object):
         self.title = title
         self.link = link
         
-class facet(object):
+class Facet(object):
     def __init__(self, name):
         self.name = name
         self.foci_list = []
@@ -144,7 +144,7 @@ def searchUpdate():
                 if "name" in items:
                     #store the name of the facet
                     facet_name = items['name']
-                    
+                    print facet_name
                     #check if this facet already exists
                     index = -1
                     for i, v in enumerate(facet_list):
@@ -159,23 +159,28 @@ def searchUpdate():
                     if index == -1:
                         #add a new facet item
                         data = facet(facet_name)
-                        for foci in items['foci']:
+                        for focus in items['foci']:
                             #add the foci
-                            data.add_foci(foci)
+                            data.add_foci(focus)
+                            print foci
                         #add the facet item to the list
                         facet_list.append(data)
                     else:
                         #get an existing facet item
                         data = facet_list.pop(index)
-                        for foci in items['foci']:
+                        for focus in items['foci']:
                             #add foci to that item
-                            data.add_foci(foci)
+                            data.add_foci(focus)
+                            print foci
                         #add the facet item back to the list    
                         facet_list.append(data)
                         
         #finally remove any foci duplicates for each facet item
         for data in facet_list:
+            print data.name
+            print data.foci_list
             data.remove_duplicates()
+            print data.foci_list
         
         if searchResults == "":
             searchResults = noResults
