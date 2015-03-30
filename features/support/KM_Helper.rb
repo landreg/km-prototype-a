@@ -35,3 +35,26 @@ def submit_charge
   fill_in('search', :with=> 'charge')
   click_button('submit')
 end
+
+def pagesizeid1
+  click_button('pagesizedropdown')
+  click_link('pagesizeid1')
+  assert page.has_content?("Page 1 of 5")
+end
+
+def pagesizeid2
+  click_button('pagesizedropdown')
+  click_link('pagesizeid2')
+  assert page.has_content?("Page 1 of 3")
+end
+
+def pagesizeid3
+  click_button('pagesizedropdown')
+  click_link('pagesizeid3')
+  assert page.has_content?("Page 1 of 1")
+end
+
+def submit_bankruptcy
+  fill_in('search', :with=> 'Bankruptcy')
+  click_button('submit')
+end
