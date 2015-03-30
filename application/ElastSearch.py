@@ -18,7 +18,7 @@ import requests
 REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
 
 #alex's test database
-REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/new_kmowledge/information'
+REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/new_kmow_man/information'
 
 #REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgetest/information'
 
@@ -97,7 +97,7 @@ def NewSearchwithFoci(data, sort_type, page_size, page_number, fields, order, fa
         
     data1 = '{"nested": {"path": "facets", "query": {"bool": {"must": [ {"match": {"facets.name": '
     data2 = '}}, {"match": {'   
-    data3 = '"facets.focis": '    
+    data3 = '"facets.foci": '    
     data4 = ', '
     data5 = '}}'    
     data6 = ']}}}}'
