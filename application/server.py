@@ -3,7 +3,7 @@ from application import app
 from flask import render_template
 from sets import Set
 from forms import searchForm, uploadContentForm, uploadResultsForm
-from ElastSearch import NewSearchDataOnContent, NewSearchDataOnId, NewSearchDataOnRelated, UploadContent
+from ElastSearch import NewSearchDataOnContent, NewSearchDataOnId, NewSearchDataOnRelated, UploadContent, NewSearchwithFoci, NewSearchDataAllContent
 
 class article(object):
     def __init__(self, title=None, itemid=None, scope=None):
@@ -16,7 +16,8 @@ class ext_link(object):
         self.title = title
         self.link = link
 
-class facet(object):
+        
+class Facet(object):
     def __init__(self, name):
         self.name = name
         self.foci_list = []
@@ -30,6 +31,8 @@ class facet(object):
 
 #Store current item ID - defualt to first item
 storeditemid = 1
+
+facet_list = []
 
 def refineResults(selectedfoci):
     refined_list = []
@@ -49,7 +52,7 @@ def refineResults(selectedfoci):
 
         if index == -1:
             #add a new facet item
-            data = facet(facet_name)
+            data = Facet(facet_name)
             data.add_foci(foci_name)
             #add the facet item to the list
             refined_list.append(data)
@@ -131,7 +134,7 @@ def searchUpdate():
 
     minPageSize = 5
     form = searchForm()
-    facet_list = []
+
     refine_by_facet_list = []
 
     # Refine By user selections
@@ -142,16 +145,16 @@ def searchUpdate():
     except KeyError:
         pass
 
-    print refine_by_facet_list
+    #print refine_by_facet_list
 
     #Get store page size from cookie
     cookiePageSize = request.cookies.get('cookie-pagesize')
 
-    print cookiePageSize
-    print request.args.get('search')
-    print request.args.get('searchtype')
-    print request.args.get('pagesize')
-    print request.args.get('pageno')
+    #print cookiePageSize
+    #print request.args.get('search')
+    #print request.args.get('searchtype')
+    #print request.args.get('pagesize')
+    #print request.args.get('pageno')
 
     search = request.args.get('search')
 
@@ -177,10 +180,58 @@ def searchUpdate():
         fields = ["scope", "keywords^5", "title"] #what fields are we searching on
 
         order = "desc" #asc or desc
-
+        
         #for searchType pass in 'score' 'date' 'popularity'
-        res = NewSearchDataOnContent(search, searchType, pageSize, pageNo, fields, order)
-        hit = res['hits']['hits']
+        if len(refine_by_facet_list) > 0:
+            print 'a foci search'
+            res = NewSearchwithFoci(search, searchType, pageSize, pageNo, fields, order, refine_by_facet_list)
+        else:
+            print 'a new search'
+            all_res = NewSearchDataAllContent(search, fields)
+            for hit in all_res['hits']['hits']:
+                #loop through the list of facets
+                for items in hit["_source"]["facets"]:
+                    if "name" in items:
+                        #store the name of the facet
+                        facet_name = items['name']
+
+                        #check if this facet already exists
+                        index = -1
+                        for i, v in enumerate(facet_list):
+                            #return the index of the element if it does
+                            if v.name == facet_name:
+                                index = i
+                                break
+                            #return -1 if it doesn't
+                            else:
+                                index = -1
+
+                        if index == -1:
+                            #add a new facet item
+                            data = Facet(facet_name)
+                            for focus in items['focis']:
+                                #add the foci
+                                data.add_foci(focus)
+
+                            #add the facet item to the list
+                            facet_list.append(data)
+                        else:
+                            #get an existing facet item
+                            data = facet_list.pop(index)
+                            for focus in items['focis']:
+                                #add foci to that item
+                                data.add_foci(focus)
+
+                            #add the facet item back to the list    
+                            facet_list.append(data)
+
+            #finally remove any foci duplicates for each facet item
+            for data in facet_list:
+                data.remove_duplicates()
+                
+            res = NewSearchDataOnContent(search, searchType, pageSize, pageNo, fields, order)
+        
+        #hit = res['hits']['hits']
 
         totalNoHits = int(res['hits']['total'])
 
@@ -190,44 +241,6 @@ def searchUpdate():
             articleId = hit["_source"]["id"]
             searchResults += "<h3><a id=\"article_id_" + articleId + "\" href =\"/lr-page/" + articleId + "\">" + hit["_source"]["title"] + "</a></h3>"
             searchResults += "<p>" + hit["_source"]["scope"] + "</p>"
-
-            #loop through the list of facets
-            for items in hit["_source"]["facets"]:
-                if "name" in items:
-                    #store the name of the facet
-                    facet_name = items['name']
-
-                    #check if this facet already exists
-                    index = -1
-                    for i, v in enumerate(facet_list):
-                        #return the index of the element if it does
-                        if v.name == facet_name:
-                            index = i
-                            break
-                        #return -1 if it doesn't
-                        else:
-                            index = -1
-
-                    if index == -1:
-                        #add a new facet item
-                        data = facet(facet_name)
-                        for foci in items['foci']:
-                            #add the foci
-                            data.add_foci(foci)
-                        #add the facet item to the list
-                        facet_list.append(data)
-                    else:
-                        #get an existing facet item
-                        data = facet_list.pop(index)
-                        for foci in items['foci']:
-                            #add foci to that item
-                            data.add_foci(foci)
-                        #add the facet item back to the list
-                        facet_list.append(data)
-
-        #finally remove any foci duplicates for each facet item
-        for data in facet_list:
-            data.remove_duplicates()
 
         if searchResults == "":
             searchResults = noResults
@@ -275,7 +288,7 @@ def displayLrPage(itemid):
         #create an object list to store external related links
         for item in hit['_source']['extlinks']:
             if "url" in item:
-                rl_external_list.append(ext_link(item["name"], item["url"]))
+                rl_external_list.append(ext_link(item["title"], item["url"]))
 
     return render_template('lr-page.html', form=form, searchElements=pr_body, related_list = rl_article_list, external_list = rl_external_list)
 
