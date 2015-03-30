@@ -143,16 +143,16 @@ def searchUpdate():
     except KeyError:
         pass
 
-    print refine_by_facet_list
+    #print refine_by_facet_list
 
     #Get store page size from cookie
     cookiePageSize = request.cookies.get('cookie-pagesize')
 
-    print cookiePageSize
-    print request.args.get('search')
-    print request.args.get('searchtype')
-    print request.args.get('pagesize')
-    print request.args.get('pageno')
+    #print cookiePageSize
+    #print request.args.get('search')
+    #print request.args.get('searchtype')
+    #print request.args.get('pagesize')
+    #print request.args.get('pageno')
 
     search = request.args.get('search')
 
@@ -181,8 +181,10 @@ def searchUpdate():
         
         #for searchType pass in 'score' 'date' 'popularity'
         if len(refine_by_facet_list) > 0:
+            print 'a foci search'
             res = NewSearchwithFoci(search, searchType, pageSize, pageNo, fields, order, refine_by_facet_list)
         else:
+            print 'a new search'
             all_res = NewSearchDataAllContent(search, fields)
             for hit in all_res['hits']['hits']:
                 #loop through the list of facets
