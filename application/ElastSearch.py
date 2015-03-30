@@ -5,6 +5,7 @@ import array
 import requests
 
 
+
 #URL = 'http://192.168.50.7:9200/knowledgetest/information'
 #ES_HOST = {"host" : "http://192.168.50.7", "port" : 9200}
 #INDEX_NAME = 'knowledge'
@@ -12,9 +13,12 @@ import requests
 
 #REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledge/information' #for testing
 
-REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
+#REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
 
 REMOTE_URL = 'https://km-prototype-1076374862.eu-west-1.bonsai.io/knowledgelive/information' #for live
+
+#alex's test database
+REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/new_kmowledge/information'
 
 #REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/knowledgetest/information'
 
@@ -48,7 +52,6 @@ def NewSearchDataOnContent(data, sort_type, page_size, page_number, fields, orde
         page_from = 0
     else:
         page_from = ((page_number - 1) * page_size)
-    #print page_from
 
     if sort_type == 'score':
         sort = '_score'
@@ -61,20 +64,79 @@ def NewSearchDataOnContent(data, sort_type, page_size, page_number, fields, orde
         
     payload = json.dumps({"from":page_from, "size":page_size, "query": {"multi_match" : {"query": data, "fields": fields}},"sort": [{sort:{"order": order}}] })
     
-    '''elif sort_type == 'popularity':
-        payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":[{"popularity": {"order": "asc"}}] })
-    elif sort_type == 'date':
-        payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":[{"lastupdate": {"order": "asc"}}] })
-    else:
-        payload = json.dumps({"from":page_from, "size":page_size, "query": {"match" : {"content": data}},"sort":["_score"] })'''
-
     headers = {'content-type': 'application/json'}
-
     res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
     res = json.loads(res.text)
 
     return res
 
+def NewSearchDataAllContent(data, fields):
+    payload = json.dumps({"query": {"multi_match" : {"query": data, "fields": fields}}})
+    
+    headers = {'content-type': 'application/json'}
+    res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
+    res = json.loads(res.text)
+
+    return res
+
+def NewSearchwithFoci(data, sort_type, page_size, page_number, fields, order, facets):
+    if page_number == 1:
+        page_from = str(0)
+    else:
+        page_from = str((page_number - 1) * page_size)
+
+    page_size = str(page_size)
+    if sort_type == 'score':
+        sort = '_score'
+    elif sort_type == 'popularity':
+        sort = 'popularity'
+    elif sort_type == 'date':
+        sort = 'lastupdate'
+    else:
+        sort = '_score'
+        
+    data1 = '{"nested": {"path": "facets", "query": {"bool": {"must": [ {"match": {"facets.name": '
+    data2 = '}}, {"match": {'   
+    data3 = '"facets.focis": '    
+    data4 = ', '
+    data5 = '}}'    
+    data6 = ']}}}}'
+    
+    num_facets = 0
+    nested_data = ''
+    
+    for facet in facets:
+        num_facets = num_facets + 1
+        nested_data = nested_data + data1 +'"'+ facet.name +'"'+ data2
+        num_foci = 0
+        for foci in facet.foci_list:
+            num_foci = num_foci + 1
+            if len(facet.foci_list) > num_foci:
+                nested_data = nested_data + data3 +'"'+ foci +'"'+ data4
+            else:
+                nested_data = nested_data + data3 +'"'+ foci +'"'+ data5
+        if len(facets) > num_facets:
+            nested_data = nested_data + data6 + data4
+        else:
+            nested_data = nested_data + data6
+      
+    query_data = '{"from":"'+page_from+'", "size":"'+page_size+'", "query": {"bool": {"must": [{"multi_match" : {"query":"'+data+'", "fields": ['
+    num_fields = 0
+    for field in fields:
+        num_fields = num_fields + 1
+        if len(fields) > num_fields:
+            query_data = query_data +'"'+ field +'"'+ data4
+        else:
+            query_data = query_data +'"'+ field +'"]'
+        
+    payload= query_data + '}}, '+nested_data+']}},"sort": [{"'+sort+'":{"order": "'+order+'"}}] }'
+    print payload
+    headers = {'content-type': 'application/json'}
+    res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
+    res = json.loads(res.text)
+
+    return res
+    
 def NewSearchDataOnItem(data):
     payload = json.dumps({"query": {"match" : {"items.item" : data}}})
     headers = {'content-type': 'application/json'}
@@ -93,7 +155,18 @@ def NewSearchDataOnRelated(data):
 
     return res
 
+def UploadContent(files):
+    try:
+        content = json.load(files)
+    except ValueError:
+        return 400
+    id_value = content["id"]
+    headers = {'content-type': 'application/json'}
+    r = requests.post(REMOTE_URLcred+'/'+id_value, data=json.dumps(content), headers=headers)
+    return r.status_code
 
+
+'''
 def SearchDataOnId(data):
 
     passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
@@ -135,13 +208,6 @@ def SearchDataOnMeta(data):
 
     return res
 
-"""def GetAllData():
-    # create ES client, create index
-    es = Elasticsearch(hosts = [ES_HOST])
-    #res = es.search(index = INDEX_NAME, size=4, body={"query": {"query_string": {"query": data}}})
-    data = es.search(index = INDEX_NAME, size=4, body={"query": {"match_all": {}}})
-    #print(" response: '%s'" % (res))
-    return data"""
 
 def SearchDataOnBody(data):
     url = URL+'/_search?q=body:'+data+'&size=5'
@@ -163,25 +229,12 @@ def SearchDataOnBody(data):
     #return json.dumps(lst)
     return res
 
-"""def buildingData():
-        url = "http://192.168.50.4:5000/BGREST/api/data"
-        payload = json.dumps({'title': title, 'address': address, 'type': appType})
-        headers = {'content-type': 'application/json'}
-        r = requests.post(REMOTE_URL, data=payload, headers=headers)
-        flash(r.text)
-        flash(r.status_code)"""
-
-def UploadContent(files):
-    try:
-        content = json.load(files)
-    except ValueError:
-        return 400
-    id_value = content["id"]
-    headers = {'content-type': 'application/json'}
-    r = requests.post(REMOTE_URLcred+'/'+id_value, data=json.dumps(content), headers=headers)
-    return r.status_code
 
 
+'''
+
+
+'''
 #SearchDataOnTitle('charge')
 #otherSearch('charge')
 #res = SearchDataOnBody('mortgage')
@@ -191,7 +244,7 @@ def UploadContent(files):
 #res = NewSearchOnId('legalEquitableCharge')
 #res = NewSearchContent('specifically')
 
-#print (res)
+#print (res)'''
 
 '''res = NewSearchDataOnContent('and', 'score', 10, 1)
 #print res
@@ -204,6 +257,27 @@ for hit in res['hits']['hits']:
         articleId = ids['id']
         print articleId'''
 
+'''class Facet(object):
+    def __init__(self, name):
+        self.name = name
+        self.foci_list = []
+        
+    def add_foci(self, foci):
+        self.foci_list.append(foci)
+    
+fields = ["scope", "title", "keywords^5"]
+facets = []
+data = Facet('appn_type')
+data.add_foci('tp')
+facets.append(data)
+data = Facet('colour')
+data.add_foci('red')
+data.add_foci('green')
+facets.append(data)
+
+res = NewSearchwithFoci('lion', 'score', 20, 1, fields, 'desc', facets)'''
+    
+#print res
 
 #{"took":3,"timed_out":false,"_shards":{"total":1,"successful":1,"failed":0},"hits":{"total":1,"max_score":1.0,"hits":[{"_index":"knowledge","_type":"information","_id":"1","_score":1.0,"_source":{"itemid": "1", "body": "I want a mortgage", "tag": "mortgage, charge, want", "subtitle": "mortgage", "title": "charge"}}]}}
 
