@@ -32,6 +32,8 @@ class Facet(object):
 #Store current item ID - defualt to first item
 storeditemid = 1
 
+facet_list = []
+
 def refineResults(selectedfoci):
     refined_list = []
     for items in selectedfoci:
@@ -132,7 +134,7 @@ def searchUpdate():
 
     minPageSize = 5
     form = searchForm()
-    facet_list = []
+
     refine_by_facet_list = []
 
     # Refine By user selections

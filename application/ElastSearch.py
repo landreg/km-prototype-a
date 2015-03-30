@@ -130,7 +130,7 @@ def NewSearchwithFoci(data, sort_type, page_size, page_number, fields, order, fa
             query_data = query_data +'"'+ field +'"]'
         
     payload= query_data + '}}, '+nested_data+']}},"sort": [{"'+sort+'":{"order": "'+order+'"}}] }'
-
+    print payload
     headers = {'content-type': 'application/json'}
     res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
     res = json.loads(res.text)
