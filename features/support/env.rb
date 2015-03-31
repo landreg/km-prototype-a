@@ -17,6 +17,5 @@ end
 
 require 'test/unit'
 include Test::Unit::Assertions
-require 'htmlentities'
 
 page.driver.browser.manage.window.maximize
