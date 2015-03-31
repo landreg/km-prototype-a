@@ -370,20 +370,22 @@ Then(/^the article structured data is returned$/) do
 end
 
 #12a.Hover on Related Articles links on Knowledge Article page
-Given(/^I get to a Knowledge Article page$/) do
-  get_to_related_links_on_articles_page
-  assert page.has_content?('Related Articles')
-  click_link('Agreement of occupier to postponement of rights')
+Given(/^a user is on the Knowledge Article page$/) do
+  access_search_page
+  submit_charge
+  click_link('Further charges')
 end
 
-When(/^I hover over a Related Articles link in the panel$/) do
+When(/^they hover over a Related Articles link$/) do
   assert page.has_content?('Related Articles')
-  assert page.has_content?('elated_article_id_ChargesContainingLegalEquitableChargeSameProperty')
-  title = find(:xpath, './/*[@id="related_article_id_ChargeCombinedWithTransferLeases"]')['title']
+  title = find(:xpath, './/*[@id="related_article_id_Chargeobligesfurtheradvances"]')['title']
+
+  assert_match title, "Charges - obligations to make further advances"
 end
 
 Then(/^the data relating to the link is displayed$/) do
-  assert_match title, "related_article_id_ChargeCombinedWithTransferLeases"
+#  assert_match title, "Some text describing the scope and content of the article"
+  find('element-locator')['title'].should == 'Expected title'
 end
 
 #16a.Submit Search and display search result
@@ -428,7 +430,7 @@ Then(/^the main bodytext is returned$/) do
   content ("A second charge is registered in the same way as a first charge, you must consider any existing chargee restrictions in the register and if consent is required. ")
 end
 
-#US19/DS19.19.Sort Related Article results
+#US19/DS19.Sort Related Article results
 Given(/^a succesful search has beeen carried out$/) do
   access_search_page
   submit_charge
@@ -445,4 +447,89 @@ Then(/^the results can be sorted by Helpful, Relevant & Latest$/) do
   assert page.has_content?("Charges - despatch and retention of documents")
   click_link('relevant')
   assert page.has_content?("Further charges")
+end
+
+#US21/DS21.Page through Helpful search results
+Given(/^I am on the Helpful tab$/) do
+  access_search_page
+  submit_charge
+end
+
+When(/^I change the results per page$/) do
+  click_link('helpful')
+
+  pagesizeid2
+
+  pagesizeid3
+
+  pagesizeid1
+end
+
+  Then(/^the page will display the selected number of results$/) do
+  assert page.has_content?("Checking the Charge")
+  assert page.has_content?("Charges containing a legal and equitable charge over the same property")
+  assert page.has_content?("Charge combined with transfers and leases")
+  assert page.has_content?("Agreement of occupier to postponement of rights ")
+  assert page.has_content?("Charges containing a legal and equitable charge over the same property")
+end
+
+#US21a/DS21a.Page through Latest search results
+Given(/^I am on the Latest tab$/) do
+  access_search_page
+  submit_charge
+end
+
+When(/^the number of results per page changes$/) do
+  click_link('latest')
+  pagesizeid3
+
+  pagesizeid2
+
+  pagesizeid1
+end
+
+Then(/^the selected number of results will be displayed$/) do
+  assert page.has_content?("Charges - despatch and retention of documents")
+  assert page.has_content?("Agreement of occupier to postponement of rights")
+  assert page.has_content?("Charges combined with transfers and leases")
+  assert page.has_content?("Health and Social Services and Social Security Adjustments Act 1983")
+  assert page.has_content?("HASSASSAA 1983 – joint proprietors - which restriction")
+end
+
+#US21b/DS21b.Page through Relevant search results
+Given(/^I am on the Relevant tab$/) do
+  access_search_page
+  submit_charge
+end
+
+When(/^I change the number of results per page$/) do
+  click_link('relevant')
+  pagesizeid3
+
+  pagesizeid2
+
+  pagesizeid1
+end
+
+Then(/^the correct number of results will be returned$/) do
+  assert page.has_content?("Further charges")
+  assert page.has_content?("Substituted charges")
+  assert page.has_content?("Substituted charges")
+  assert page.has_content?("Second charges")
+  assert page.has_content?("Charges combined with transfers and leases")
+end
+
+#US22/DS22.Results Page displays the number of search results
+Given(/^I have completed a search$/) do
+  access_search_page
+  submit_bankruptcy
+end
+
+When(/^I am on the results page$/) do
+  assert page.has_content?("Bankruptcy - overview")
+  assert page.has_content?("Bankruptcy – applications for Form J restrictions")
+end
+
+Then(/^the page displays the number of search results$/) do
+  assert page.has_content?("Search matches 2 results")
 end

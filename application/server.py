@@ -16,7 +16,7 @@ class ext_link(object):
         self.title = title
         self.link = link
 
-        
+
 class Facet(object):
     def __init__(self, name):
         self.name = name
@@ -134,18 +134,23 @@ def searchUpdate():
 
     minPageSize = 5
     form = searchForm()
-
     refine_by_facet_list = []
 
     # Refine By user selections
     if request.args.getlist('fociselected'):
+        fociSelected = request.args.getlist('fociselected')
         session['refined_search_list'] = request.args.getlist('fociselected')
     try:
         refine_by_facet_list = refineResults(session['refined_search_list'])
     except KeyError:
         pass
 
-    #print refine_by_facet_list
+    if request.args.get('facetclear'):
+        refine_by_facet_list = []
+        session['refined_search_list'] = []
+
+    print "Return session: " + str(session.get('refined_search_list'))
+    #print str(refine_by_facet_list)
 
     #Get store page size from cookie
     cookiePageSize = request.cookies.get('cookie-pagesize')
@@ -180,7 +185,7 @@ def searchUpdate():
         fields = ["scope", "keywords^5", "title"] #what fields are we searching on
 
         order = "desc" #asc or desc
-        
+
         #for searchType pass in 'score' 'date' 'popularity'
         if len(refine_by_facet_list) > 0:
             print 'a foci search'
@@ -222,15 +227,15 @@ def searchUpdate():
                                 #add foci to that item
                                 data.add_foci(focus)
 
-                            #add the facet item back to the list    
+                            #add the facet item back to the list
                             facet_list.append(data)
 
             #finally remove any foci duplicates for each facet item
             for data in facet_list:
                 data.remove_duplicates()
-                
+
             res = NewSearchDataOnContent(search, searchType, pageSize, pageNo, fields, order)
-        
+
         #hit = res['hits']['hits']
 
         totalNoHits = int(res['hits']['total'])
@@ -247,7 +252,9 @@ def searchUpdate():
     else:
         return render_template('index.html', form=form)
 
-    resp = make_response(render_template('searchResult.html', form=form, searchElements=searchResults, search=search, searchtype=searchType, totalnohits=totalNoHits, pagesize=pageSize, pageno=pageNo, facetElements=facet_list))
+
+    print "facet_list " + str(facet_list)
+    resp = make_response(render_template('searchResult.html', form=form, searchElements=searchResults, search=search, searchtype=searchType, totalnohits=totalNoHits, pagesize=pageSize, pageno=pageNo, facetElements=facet_list, refineFacetList=refine_by_facet_list))
 
     #Set or create cookie to store number of results on the page
     cookie = str(pageSize)
