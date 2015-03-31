@@ -17,6 +17,7 @@
         <a href="/"><label><h3>Casework Guidance Knowledge Base</h3></label></a>
         <div id="header-input-group" class="input-group pull-right">
           <form method="GET" action="/search-result">
+            <input type="hidden" value="true" name="bans">
             {{form.search(type="text", class="form-control")}}
             <span class="input-group-btn">
                {{form.submit(class="btn btn-default", type="submit")}}
