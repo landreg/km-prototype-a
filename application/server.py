@@ -214,7 +214,7 @@ def searchUpdate():
                         if index == -1:
                             #add a new facet item
                             data = Facet(facet_name)
-                            for focus in items['focis']:
+                            for focus in items['foci']:
                                 #add the foci
                                 data.add_foci(focus)
 
@@ -223,7 +223,7 @@ def searchUpdate():
                         else:
                             #get an existing facet item
                             data = facet_list.pop(index)
-                            for focus in items['focis']:
+                            for focus in items['foci']:
                                 #add foci to that item
                                 data.add_foci(focus)
 
