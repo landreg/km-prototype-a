@@ -383,9 +383,10 @@ When(/^they hover over a Related Articles link$/) do
   assert_match title, "Charges - obligations to make further advances"
 end
 
-#Then(/^the data relating to the link is displayed$/) do
+Then(/^the data relating to the link is displayed$/) do
 #  assert_match title, "Some text describing the scope and content of the article"
-#end
+  find('element-locator')['title'].should == 'Expected title'
+end
 
 #16a.Submit Search and display search result
 Given(/^I enter a search$/) do
