@@ -291,11 +291,10 @@ def displayLrPage(itemid):
                 #create an object list to store related article information
                 for hit in related_res['hits']['hits']:
                     rl_article_list.append(article(hit["_source"]["title"], hit["_source"]["id"], hit["_source"]["scope"]))
-
         #create an object list to store external related links
         for item in hit['_source']['extlinks']:
             if "url" in item:
-                rl_external_list.append(ext_link(item["title"], item["url"]))
+                rl_external_list.append(ext_link(item["name"], item["url"]))
 
     return render_template('lr-page.html', form=form, searchElements=pr_body, related_list = rl_article_list, external_list = rl_external_list)
 
