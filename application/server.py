@@ -132,9 +132,14 @@ def index():
 @app.route('/search-result', methods=['GET'])
 def searchUpdate():
 
+    global facet_list
     minPageSize = 5
     form = searchForm()
     refine_by_facet_list = []
+
+    if request.args.get('bans'):
+        print "got here"
+        session.pop('refined_search_list',None)
 
     # Refine By user selections
     if request.args.getlist('fociselected'):
@@ -145,21 +150,18 @@ def searchUpdate():
     except KeyError:
         pass
 
-    if request.args.get('facetclear'):
+    print request.args.get('rbsubmit')
+    print request.args.getlist('fociselected')
+    print request.args.get('facetclear')
+
+    if (request.args.get('rbsubmit') == 'true' and not request.args.getlist('fociselected')) or (request.args.get('facetclear')):
         refine_by_facet_list = []
         session['refined_search_list'] = []
 
-    print "Return session: " + str(session.get('refined_search_list'))
-    #print str(refine_by_facet_list)
 
     #Get store page size from cookie
     cookiePageSize = request.cookies.get('cookie-pagesize')
 
-    #print cookiePageSize
-    #print request.args.get('search')
-    #print request.args.get('searchtype')
-    #print request.args.get('pagesize')
-    #print request.args.get('pageno')
 
     search = request.args.get('search')
 
@@ -236,8 +238,6 @@ def searchUpdate():
 
             res = NewSearchDataOnContent(search, searchType, pageSize, pageNo, fields, order)
 
-        #hit = res['hits']['hits']
-
         totalNoHits = int(res['hits']['total'])
 
         print "Total number of hits " + str(res['hits']['total'])
@@ -253,7 +253,13 @@ def searchUpdate():
         return render_template('index.html', form=form)
 
 
-    print "facet_list " + str(facet_list)
+
+    if (request.args.get('bans') and totalNoHits == 0):
+
+        if facet_list:
+            facet_list = []
+
+
     resp = make_response(render_template('searchResult.html', form=form, searchElements=searchResults, search=search, searchtype=searchType, totalnohits=totalNoHits, pagesize=pageSize, pageno=pageNo, facetElements=facet_list, refineFacetList=refine_by_facet_list))
 
     #Set or create cookie to store number of results on the page
