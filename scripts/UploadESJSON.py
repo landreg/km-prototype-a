@@ -1,9 +1,10 @@
+#Python script to upload data from the location specified in rootdir to the ES database specified in REMOTE_URLcred
 import os
 import requests
 import json
 
 rootdir = '/vagrant/files'
-REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/new_kmowledge/information' #for live
+REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/km_alex_test/information' #for live
 
 for subdir, dirs, files in os.walk(rootdir):
     for file in files:
