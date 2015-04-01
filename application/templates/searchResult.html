@@ -18,7 +18,8 @@
         <input type="hidden" value="{{search|e}}" name="search">
         <input type="hidden" value="{{searchtype|e}}" name="searchtype">
         <input type="hidden" value="{{pagesize|e}}" name="pagesize">
-        <input type="hidden" value="{{pageno|e}}" name="pageno">
+        <input type="hidden" value="1" name="pageno">
+        <input type="hidden" value="true" name="rbsubmit">
       <div class="panel panel-default">
         <div class="panel-heading">
           <h3 class="panel-title">Refine By</h3>
@@ -30,7 +31,7 @@
           {% if facetElements %}
             <div class="help-block">Select criteria below to refine the results of your search and click 'Submit' when you're done.</div>
             <button type="submit" class="btn btn-default btn-xs">Submit</button>
-            <a id="rest" class="btn btn-default btn-xs" role="button" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno={{pageno|e}}&facetclear=true">Reset</a>
+            <a id="rest" class="btn btn-default btn-xs" role="button" href="/search-result?search={{search|e}}&searchtype={{searchtype|e}}&pagesize={{pagesize|e}}&pageno=1&facetclear=true">Reset</a>
             {% for facet in facetElements %}
             <h4>{{facet.name}}</h4>
               {% for foci in facet.foci_list %}

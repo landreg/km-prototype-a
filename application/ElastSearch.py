@@ -5,10 +5,13 @@ import requests
 
 
 #alex's test database
-REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/km_alex_test/information'
+#REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/km_alex_test/information'
 
 #main test database
 #REMOTE_URLcred = 'https://cp94zbqxv3:estftr8mkx@km-prototype-1076374862.eu-west-1.bonsai.io/new_kmow_man/information'
+
+#Main database
+REMOTE_URLcred = 'http://gl-know-ap33.lnx.lr.net:9200/knowledge_manage/information'
 
 
 def NewSearchDataOnId(data):
@@ -35,9 +38,9 @@ def NewSearchDataOnContent(data, sort_type, page_size, page_number, fields, orde
         sort = 'lastupdate'
     else:
         sort = '_score'
-        
+
     payload = json.dumps({"from":page_from, "size":page_size, "query": {"multi_match" : {"query": data, "fields": fields}},"sort": [{sort:{"order": order}}] })
-    
+
     headers = {'content-type': 'application/json'}
     res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
     res = json.loads(res.text)
@@ -46,7 +49,7 @@ def NewSearchDataOnContent(data, sort_type, page_size, page_number, fields, orde
 
 def NewSearchDataAllContent(data, fields):
     payload = json.dumps({"query": {"multi_match" : {"query": data, "fields": fields}}})
-    
+
     headers = {'content-type': 'application/json'}
     res = requests.get(REMOTE_URLcred+'/_search', data=payload, headers=headers)
     res = json.loads(res.text)
@@ -69,30 +72,16 @@ def NewSearchwithFoci(data, sort_type, page_size, page_number, fields, order, fa
     else:
         sort = '_score'
         
-        {
-          "nested": {
-            "path": "facets",
-            "query": {
-              "bool": {
-                "must": [
-                  { "match": { "facets.name": "appn_type" }},
-                  { "match": {"facets.focis": "tp"}}, 
-                  { "match" : {"facets.focis": "charge"}}
-                  ]
-
-                  }
-        }}}
-        
     data1 = '{"nested": {"path": "facets", "query": {"bool": {"must": [ {"match": {"facets.name": '
     data2 = '}}, '   
     data3 = '{"match": {"facets.foci": '    
     data4 = ', '
-    data5 = '}}'    
+    data5 = '}}'
     data6 = ']}}}}'
-    
+
     num_facets = 0
     nested_data = ''
-    
+
     for facet in facets:
         num_facets = num_facets + 1
         nested_data = nested_data + data1 +'"'+ facet.name +'"'+ data2
@@ -107,7 +96,7 @@ def NewSearchwithFoci(data, sort_type, page_size, page_number, fields, order, fa
             nested_data = nested_data + data6 + data4
         else:
             nested_data = nested_data + data6
-      
+
     query_data = '{"from":"'+page_from+'", "size":"'+page_size+'", "query": {"bool": {"must": [{"multi_match" : {"query":"'+data+'", "fields": ['
     num_fields = 0
     for field in fields:
@@ -116,7 +105,7 @@ def NewSearchwithFoci(data, sort_type, page_size, page_number, fields, order, fa
             query_data = query_data +'"'+ field +'"'+ data4
         else:
             query_data = query_data +'"'+ field +'"]'
-        
+
     payload= query_data + '}}, '+nested_data+']}},"sort": [{"'+sort+'":{"order": "'+order+'"}}] }'
     print payload
     headers = {'content-type': 'application/json'}
@@ -124,7 +113,7 @@ def NewSearchwithFoci(data, sort_type, page_size, page_number, fields, order, fa
     res = json.loads(res.text)
 
     return res
-    
+
 def NewSearchDataOnItem(data):
     payload = json.dumps({"query": {"match" : {"items.item" : data}}})
     headers = {'content-type': 'application/json'}
@@ -148,7 +137,11 @@ def UploadContent(files):
         content = json.load(files)
     except ValueError:
         return 400
-    id_value = content["id"]
-    headers = {'content-type': 'application/json'}
-    r = requests.post(REMOTE_URLcred+'/'+id_value, data=json.dumps(content), headers=headers)
-    return r.status_code
+
+    if "id" in content:
+        id_value = content["id"]
+        headers = {'content-type': 'application/json'}
+        r = requests.post(REMOTE_URLcred+'/'+id_value, data=json.dumps(content), headers=headers)
+        return r.status_code
+    else:
+        return 400
